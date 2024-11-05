@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Icon from "@/ui/components/ui/Icon";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Loading from "@/ui/components/Loading";
 import Tooltip from "@/ui/components/ui/Tooltip";
-import { useSelector } from "react-redux";
-import { VisitView } from "@/primary/visit/VisitView";
-import type { UserView } from "@/primary/user/UserView";
-import { DependeciesContext } from "@/utils/useDepedencies";
-import { PropertyType } from "@/domains/PropertyType";
+import {useSelector} from "react-redux";
+import {VisitView} from "@/primary/visit/VisitView";
+import type {UserView} from "@/primary/user/UserView";
+import {DependeciesContext} from "@/utils/useDepedencies";
+import {PropertyType} from "@/domains/PropertyType";
 import Button from "@/ui/components/ui/Button";
 
 const VisitGridList = () => {
-  const { visitServices, userServices, propertyServices } =
+  // @ts-expect-error is known
+  const {visitServices, userServices, propertyServices} =
     useContext(DependeciesContext);
   const navigate = useNavigate();
-  const { isAdmin, isTenant } = useSelector((state) => state.auth);
+  const {isAdmin, isTenant} = useSelector((state) => state.auth);
   const [visits, setVisits] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,7 +24,7 @@ const VisitGridList = () => {
   type ProfileProps = {
     tenantId: string;
   };
-  const Profile = ({ tenantId }: ProfileProps) => {
+  const Profile = ({tenantId}: ProfileProps) => {
     const [user, setUser] = useState<UserView>({});
 
     const fetchUser = async () => {
@@ -43,14 +44,15 @@ const VisitGridList = () => {
           children={
             <div className="flex items-center group w-min rounded-lg transition">
               <div className="w-10 h-10 rounded bg-gray-100">
-                <img className="w-10 h-10" src={user?.picture} alt="" />
+                <img className="w-10 h-10" src={user?.picture} alt=""/>
               </div>
               <div className="ml-2 mt-1">
-                <span className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
+                <span
+                  className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
                   {user?.fullName}
                 </span>
                 <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
-                  <Icon icon="heroicons-outline:at-symbol" width="14" />
+                  <Icon icon="heroicons-outline:at-symbol" width="14"/>
                   <span className="ml-1">{user?.email}</span>
                 </div>
               </div>
@@ -77,10 +79,11 @@ const VisitGridList = () => {
                 {user?.fullName}
               </span>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-2">
-                <Icon icon="heroicons-outline:at-symbol" width="14" />
+                <Icon icon="heroicons-outline:at-symbol" width="14"/>
                 <span className="ml-1">{user?.email}</span>
               </div>
-              <span className="text-xs block p-0 leading-4 mt-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
+              <span
+                className="text-xs block p-0 leading-4 mt-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
                 {/* membre depuis 2012 */}
               </span>
             </div>
@@ -94,7 +97,7 @@ const VisitGridList = () => {
     visit: VisitView;
   };
 
-  const VisitGridItem = ({ visit }: VisitGridItemProps) => {
+  const VisitGridItem = ({visit}: VisitGridItemProps) => {
     const [property, setProperty] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -125,11 +128,11 @@ const VisitGridList = () => {
       else setPropertyType(commercialTypes?.find(findType));
     };
 
-    const cancelVisit = async () => {
-      await visitServices.cancel(visit.id);
+    const cancelVisit = async (id: string, index: number) => {
+      await visitServices.cancel(visit.id, index);
     };
-    const acceptVisit = async () => {
-      await visitServices.accept(visit.id);
+    const acceptVisit = async (id: string, index: number) => {
+      await visitServices.accept(visit.id, index);
     };
 
     useEffect(() => {
@@ -151,7 +154,7 @@ const VisitGridList = () => {
     return (
       <div
         onClick={() => navigate(`/owner/visits/${visit?.id}`)}
-        className="card rounded-md bg-white dark:bg-slate-800 hover:shadow-xl cursor-pointer p-4 px-6 flex flex-col gap-y-2"
+        className="card rounded-md bg-white dark:bg-slate-800 hover:shadow-xl cursor-pointer p-4 px-6 flex flex-col justify-between gap-y-2"
       >
         <div className="pt-3 flex items-center">
           <div className="w-12 h-12 rounded bg-gray-100">
@@ -162,7 +165,7 @@ const VisitGridList = () => {
             />
           </div>
           {isLoading ? (
-            <Loading />
+            <Loading/>
           ) : (
             <div className="ml-2 mt-1">
               <Link
@@ -172,7 +175,7 @@ const VisitGridList = () => {
                 {propertyType?.name ?? ""}
               </Link>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm pt-2">
-                <Icon icon="heroicons-outline:map-pin" width="18" />
+                <Icon icon="heroicons-outline:map-pin" width="18"/>
                 <span className="ml-1">
                   {`${property?.adresse ?? ""} ${property?.quartier ?? ""}, ${
                     property?.ville ?? ""
@@ -183,50 +186,67 @@ const VisitGridList = () => {
           )}
         </div>
         <div
-          className={`rounded-full px-3 my-1 py-1 w-min text-sm font-semibold ${
+          className={`rounded-full px-3 my-1 py-1 w-fit text-nowrap text-sm font-semibold ${
             visit.status == 0
               ? "text-orange-500 bg-orange-200"
               : visit.status == 1
-              ? "text-red-600 bg-red-200"
-              : visit.status == 2
-              ? "text-green-600 bg-green-200"
-              : ""
+                ? "text-red-600 bg-red-200"
+                : visit.status == 2
+                  ? "text-green-600 bg-green-200"
+                  : ""
           }`}
         >
           {statusTexts[visit.status]}
         </div>
-        <div className="flex items-center space-x-4 text-gray-500 font-medium">
-          <div className="flex items-center space-x-1">
-            <Icon icon="heroicons-outline:calendar" width="18" />
-            <span>{visit?.date}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Icon icon="heroicons-outline:clock" width="18" />
-            <span>{visit?.time}</span>
-          </div>
-        </div>
-        {!isTenant && <Profile tenantId={visit.tenantId} />}
+        {
+          visit?.dates?.map((dateItem, index) =>
+            <div key={index} className="flex justify-between items-center">
+              <div className="flex items-center space-x-4 text-gray-500 font-medium">
+                <div className="flex items-center space-x-1">
+                  <Icon icon="heroicons-outline:calendar" width="18"/>
+                  <span>{dateItem?.date}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Icon icon="heroicons-outline:clock" width="18"/>
+                  <span>{dateItem?.hour}</span>
+                </div>
+              </div>
+              {dateItem.status === 0 ? (
+                <div className="flex gap-x-2">
+                  <Button
+                    icon="heroicons-outline:x-mark"
+                    onClick={() => cancelVisit(visit.id, index)}
+                    className="hover:btn-danger btn text-gray-500 rounded-full px-1 py-1 w-min"
+                  />
+                  <Button
+                    icon="heroicons-outline:check"
+                    onClick={() => acceptVisit(visit.id, index)}
+                    className="hover:btn-primary btn text-gray-500 rounded-full px-1 py-1 w-min"
+                  />
+                </div>
+              ) : <div
+                className={`rounded-full px-3 my-1 py-1 w-fit text-nowrap text-sm font-semibold ${
+                  visit.status == 0
+                    ? "text-orange-500 bg-orange-200"
+                    : visit.status == 1
+                      ? "text-red-600 bg-red-200"
+                      : visit.status == 2
+                        ? "text-green-600 bg-green-200"
+                        : ""
+                }`}
+              >{dateItem.status}</div>
+              }
+            </div>
+          )
+        }
+
+        {!isTenant && <Profile tenantId={visit.tenantId}/>}
         <div>
-          <div className="text-sm block h-16 overflow-hidden">
+          <div className="text-sm block max-h-16 overflow-hidden">
             {visit?.details}
           </div>
         </div>
-        {visit.status === 0 && (
-          <div className="flex gap-x-4">
-            <Button
-              icon="heroicons-outline:x-mark"
-              text="Refuser"
-              onClick={cancelVisit}
-              className="bg-red-700 text-white py-2 w-full"
-            />
-            <Button
-              icon="heroicons-outline:check"
-              text="Acepter"
-              onClick={acceptVisit}
-              className="bg-slate-800 text-white py-2 w-full"
-            />
-          </div>
-        )}
+
       </div>
     );
   };
@@ -258,11 +278,11 @@ const VisitGridList = () => {
         </h1>
       </div>
       {isLoading ? (
-        <Loading />
+        <Loading/>
       ) : visits.length ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {visits.map((visit) => (
-            <VisitGridItem key={visit.id} visit={visit} />
+            <VisitGridItem key={visit.id} visit={visit}/>
           ))}
         </div>
       ) : (

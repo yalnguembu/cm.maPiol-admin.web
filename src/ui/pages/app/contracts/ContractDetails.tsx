@@ -113,7 +113,6 @@ const ContractDetails = () => {
                 D’AUTRE PART
               </p>
             </div>
-
             <div className="mb-2">
               <p className="font-semibold text-xl text-primary-700 mt-2">
                 IL A ÉTÉ CONVENU CE QUI SUIT :
@@ -156,7 +155,7 @@ const ContractDetails = () => {
             </div>
 
             <p className="font-semibold text-xl text-primary-700 mt-2">
-              ARTICLE 4 : DÉPÔT DE GARANTIE{" "}
+              ARTICLE 4 : DÉPÔT DE GARANTIE
             </p>
             <div className="mb-2">
               <p className="text-lg text-[#192340] p-2">
@@ -180,11 +179,11 @@ const ContractDetails = () => {
                 - Assurer au Locataire la jouissance paisible du Bien loué.
               </p>
               <p className="text-lg text-[#192340] p-2">
-                - Maintenir le Bien en état de servir à l'usage prévu.{" "}
+                - Maintenir le Bien en état de servir à l'usage prévu.
               </p>
               <p className="text-lg text-[#192340] p-2">
                 - Effectuer toutes les réparations nécessaires non imputables au
-                Locataire.{" "}
+                Locataire.
               </p>
             </div>
 
@@ -200,14 +199,14 @@ const ContractDetails = () => {
               </p>
               <p className="text-lg text-[#192340] p-2">
                 - User des locaux de manière raisonnable et conformément à leur
-                destination.{" "}
+                destination.
               </p>
               <p className="text-lg text-[#192340] p-2">
-                - Ne pas sous-louer le Bien sans l'accord écrit du Bailleur.{" "}
+                - Ne pas sous-louer le Bien sans l'accord écrit du Bailleur.
               </p>
               <p className="text-lg text-[#192340] p-2">
                 - Maintenir le Bien en bon état et réaliser les petites
-                réparations nécessaires.{" "}
+                réparations nécessaires.
               </p>
             </div>
 
@@ -238,13 +237,13 @@ const ContractDetails = () => {
                 ARTICLE 9 : SIGNATURES
               </p>
               <p className="text-lg text-[#192340] p-2">
-                Fait à [Lieu], le [Date].{" "}
+                Fait à [Lieu], le [Date].
               </p>
               <p className="text-lg text-[#192340] p-2">
-                [Nom et signature du Bailleur]{" "}
+                [Nom et signature du Bailleur]
               </p>
               <p className="text-lg text-[#192340] p-2">
-                [Nom et signature du Locataire]{" "}
+                [Nom et signature du Locataire]
               </p>
             </div>
 
@@ -261,19 +260,6 @@ const ContractDetails = () => {
                 {contract.contractStatus}
               </p>
             </div>
-            {/*
-        <button className={button}>
-          <p className={buttonp}>Télécharger le Contrat</p>
-        </button>
-
-        <button
-          onClick={() => navigate("PaymentList", { property })}
-          className={[button, secondaryButton]}
-        >
-          <p className={[buttonp, secondaryButtonp]}>
-            Voir l'Historique de Paiement
-          </p>
-        </button> */}
           </div>
           <div className="flex items-center">
             <Icon icon="heroicons:check"/>

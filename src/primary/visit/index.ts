@@ -1,4 +1,4 @@
-import { VisitRepository } from "@/domains/visit/repository/VisitRepository";
+import {VisitRepository} from "@/domains/visit/repository/VisitRepository";
 import {
   CancelUseCase,
   GetByIdUseCase,
@@ -7,8 +7,8 @@ import {
   AcceptUseCase,
   CreateUseCase
 } from "./useCases";
-import { VisitId } from "@/domains/visit/types";
-import { VisitToSave } from "domains/visit/types";
+import {VisitId} from "@/domains/visit/types";
+import {VisitToSave} from "domains/visit/types";
 
 export class VisitService {
   private getByIdUseCase: GetByIdUseCase;
@@ -35,8 +35,8 @@ export class VisitService {
     return await this.getAllUseCase.execute();
   }
 
-  async getMines(userId: string) {
-    return await this.getMinesUseCase.execute(userId);
+  async getMines(userId: string, role?: "tenant" | "owner") {
+    return await this.getMinesUseCase.execute(userId, role);
   }
 
   async cancel(id: string) {
@@ -47,7 +47,7 @@ export class VisitService {
     return await this.acceptUseCase.execute(id);
   }
 
-  async createVisit(form: VisitToSave){
+  async createVisit(form: VisitToSave) {
     return await this.createUseCase.execute(form);
   }
 

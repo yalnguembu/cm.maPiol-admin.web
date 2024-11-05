@@ -104,6 +104,7 @@ function App() {
             <Route path="pending" element={<ContractListPage />} />
             <Route path=":id" element={<ContractDetails />} />
           </Route>
+          <Route path="calendars" element={<VisitsList />} />
           <Route path="profile" element={<UserProfile />} />
           <Route
             path="additionnal-informations"

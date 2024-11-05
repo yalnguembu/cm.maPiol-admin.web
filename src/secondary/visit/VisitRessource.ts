@@ -1,11 +1,12 @@
-import { Visit } from "@/domains/visit";
-import { ApiVisit, VisitFetched } from "./ApiVisit";
-import { VisitRepository } from "@/domains/visit/repository/VisitRepository";
-import { FirebaseClient } from "@/secondary/FirebaseClient";
-import { VisitToSave } from "domains/visit/types";
+import {Visit} from "@/domains/visit";
+import {ApiVisit, VisitFetched} from "./ApiVisit";
+import {VisitRepository} from "@/domains/visit/repository/VisitRepository";
+import {FirebaseClient} from "@/secondary/FirebaseClient";
+import {VisitToSave} from "domains/visit/types";
 
 export class VisitRessource implements VisitRepository {
-  constructor(private readonly firebaseClient: FirebaseClient) {}
+  constructor(private readonly firebaseClient: FirebaseClient) {
+  }
 
   async getAll(): Promise<Visit[]> {
     const apiVisits = await this.firebaseClient.getAllDocuments<VisitFetched[]>(
@@ -16,12 +17,12 @@ export class VisitRessource implements VisitRepository {
     return apiVisits.map(ApiVisit.toDomain);
   }
 
-  async getMines(userId: string): Promise<Visit[]> {
+  async getMines(userId: string, role?: "tenant" | "owner"): Promise<Visit[]> {
     const apiVisits = await this.firebaseClient.getDataByCondition<
       VisitFetched[]
     >({
       collection: "AgendaVisites",
-      field: "proprietaireId",
+      field: role === "tenant" ? "userId" : "proprietaireId",
       operator: "==",
       value: userId,
     });
@@ -40,7 +41,7 @@ export class VisitRessource implements VisitRepository {
     const visitCreatedId = await this.firebaseClient.addDocument({
       collection: "AgendaVisites",
       documentName: visitId,
-      form: { statut: 1 },
+      form: {statut: 1},
     });
     return visitCreatedId;
   }
@@ -49,7 +50,7 @@ export class VisitRessource implements VisitRepository {
     await this.firebaseClient.updateDocument({
       collection: "AgendaVisites",
       documentName: visitId,
-      form: { statut: 2 },
+      form: {statut: 2},
     });
   }
 

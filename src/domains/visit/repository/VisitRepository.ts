@@ -4,7 +4,7 @@ export interface VisitRepository {
 
   getAll(): Promise<Visit[]>;
 
-  getMines(id:string): Promise<Visit[]>;
+  getMines(id:string, role?: "owner"| "tenant"): Promise<Visit[]>;
 
   cancel(userId: string): Promise<void>;
 

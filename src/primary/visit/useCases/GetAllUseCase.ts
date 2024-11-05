@@ -5,8 +5,8 @@ export class GetAllUseCase {
   constructor(private readonly visitRepository: VisitRepository) {}
 
   async execute(): Promise<VisitView[]> {
-    const owners = await this.visitRepository.getAll();
+    const visits = await this.visitRepository.getAll();
 
-    return owners.map(VisitView.fromDomain);
+    return visits.map(VisitView.fromDomain);
   }
 }

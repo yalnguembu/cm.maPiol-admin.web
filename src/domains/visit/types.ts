@@ -1,3 +1,5 @@
+import {VisitDateProperties} from "./VisitDate";
+
 export type VisitId = string;
 
 export type VisitProperties = {
@@ -6,8 +8,7 @@ export type VisitProperties = {
   ownerId: string;
   propertyId: string;
   details: string;
-  date: string;
-  time: string;
+  dates: VisitDateProperties[];
   status: number;
 };
 

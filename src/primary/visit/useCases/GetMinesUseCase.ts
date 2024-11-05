@@ -1,11 +1,12 @@
-import { VisitRepository } from "domains/visit/repository/VisitRepository";
-import { VisitView } from "../VisitView";
+import {VisitRepository} from "domains/visit/repository/VisitRepository";
+import {VisitView} from "../VisitView";
 
 export class GetMinesUseCase {
-  constructor(private readonly visitRepository: VisitRepository) {}
+  constructor(private readonly visitRepository: VisitRepository) {
+  }
 
-  async execute(userId: string): Promise<VisitView[]> {
-    const owners = await this.visitRepository.getMines(userId);
+  async execute(userId: string, role: "owner" | "tenant"): Promise<VisitView[]> {
+    const owners = await this.visitRepository.getMines(userId, role);
 
     return owners.map(VisitView.fromDomain);
   }

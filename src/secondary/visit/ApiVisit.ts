@@ -1,12 +1,16 @@
-import { Visit } from "@/domains/visit";
-import { VisitProperties } from "@/domains/visit/types";
+import {Visit} from "@/domains/visit";
+import {VisitProperties} from "@/domains/visit/types";
 
-export type VisitFetched = {
-  id: string;
+type Dates = {
   dateVisite: string;
   heureVisite: string;
+  statut: number;
+}
+export type VisitFetched = {
+  id: string;
+  dates: Dates[];
   propietaireId: string;
-  propieteId: string;
+  proprieteID: string;
   statut: string;
   userId: string;
   autreDetails: string;
@@ -16,15 +20,19 @@ export class ApiVisit {
   static toDomain(apiVisit: VisitFetched): Visit {
     return Visit.fromProperties({
       id: apiVisit.id ?? "",
-      date: apiVisit.dateVisite ?? "",
-      time: apiVisit.heureVisite ?? "",
+      dates: apiVisit.dates?.map((dateItem) => ({
+        date: dateItem.dateVisite,
+        hour: dateItem.heureVisite,
+        status: dateItem.statut
+      })) ?? [],
       details: apiVisit.autreDetails ?? "",
       tenantId: apiVisit.userId ?? "",
       ownerId: apiVisit.propietaireId ?? "",
-      propertyId: apiVisit.propitteId ?? "",
+      propertyId: apiVisit.proprieteID ?? "",
       status: apiVisit.statut ?? 0,
     });
   }
+
   static fromProperties(visit: VisitProperties): Omit<VisitFetched, "id"> {
     return {
       autreDetails: visit.details,

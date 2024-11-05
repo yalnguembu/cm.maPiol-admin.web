@@ -79,6 +79,12 @@ export const visitorMenus = [
     ],
   },
   {
+    title: "Agenda",
+    isHide: true,
+    icon: "heroicons-outline:calendar",
+    link: "/calendars",
+  },
+  {
     title: "messagerie",
     isHide: true,
     icon: "heroicons-outline:chat",

@@ -1,34 +1,32 @@
-import { VisitProperties } from "./types";
+import {VisitProperties} from "./types";
+import {VisitDate, VisitDateProperties} from "./VisitDate";
 
 
 export class Visit {
   private constructor(
     private readonly id: string,
-    private readonly date: string,
-    private readonly time: string,
+    private readonly _dates: VisitDateProperties[],
     private readonly tenantId: string,
     private readonly ownerId: string,
     private readonly propertyId: string,
-    private readonly status: string,
     private readonly details: string,
-  ) {}
+    private readonly status: number,
+  ) {
+  }
 
   static fromProperties(properties: VisitProperties) {
     const {
       id,
-      date,
-      time,
+      dates,
       tenantId,
       ownerId,
       propertyId,
       details,
       status,
     } = properties;
-
     return new Visit(
       id,
-      date,
-      time,
+      dates,
       tenantId,
       ownerId,
       propertyId,
@@ -37,11 +35,14 @@ export class Visit {
     );
   }
 
+  get dates(): VisitDate[] {
+    return this._dates?.map((date) => new VisitDate(date));
+  }
+
   get properties(): VisitProperties {
     return {
       id: this.id,
-      date: this.date,
-      time: this.time,
+      dates: this._dates,
       tenantId: this.tenantId,
       ownerId: this.ownerId,
       propertyId: this.propertyId,
