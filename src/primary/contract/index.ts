@@ -1,12 +1,14 @@
-import { ContractRepository } from "@/domains/contract/repository/ContractRepository";
+import {ContractRepository} from "@/domains/contract/repository/ContractRepository";
 import {
   CreateUseCase,
   GetByIdUseCase,
   GetAllUseCase,
   GetMinesUseCase,
-  UpdateContractUseCase,
+  UpdateContractUseCase, SignContractUseCase, GetPaymentsUseCase, CreatePaymentUseCase,
 } from "./useCases";
-import { ContractId, ContractToSave } from "domains/contract/types";
+import {ContractId, ContractToSave} from "domains/contract/types";
+import {Payment} from "@/domains/contract/Payment";
+import {ContractStatusFilter} from "@/domains/contract/enum";
 
 export class ContractService {
   private getByIdUseCase: GetByIdUseCase;
@@ -14,32 +16,50 @@ export class ContractService {
   private getMinesUseCase: GetMinesUseCase;
   private getAllUseCase: GetAllUseCase;
   private updateUseCase: UpdateContractUseCase;
+  private signContractUseCase: SignContractUseCase;
+  private getPaymentsUseCase: GetPaymentsUseCase;
+  private createPaymentUseCase: CreatePaymentUseCase;
 
-  constructor(propertyRepository: ContractRepository) {
-    this.getByIdUseCase = new GetByIdUseCase(propertyRepository);
-    this.createUseCase = new CreateUseCase(propertyRepository);
-    this.getMinesUseCase = new GetMinesUseCase(propertyRepository);
-    this.getAllUseCase = new GetAllUseCase(propertyRepository);
-    this.updateUseCase = new UpdateContractUseCase(propertyRepository);
+  constructor(contractRepository: ContractRepository) {
+    this.getByIdUseCase = new GetByIdUseCase(contractRepository);
+    this.createUseCase = new CreateUseCase(contractRepository);
+    this.getMinesUseCase = new GetMinesUseCase(contractRepository);
+    this.getAllUseCase = new GetAllUseCase(contractRepository);
+    this.updateUseCase = new UpdateContractUseCase(contractRepository);
+    this.signContractUseCase = new SignContractUseCase(contractRepository);
+    this.getPaymentsUseCase = new GetPaymentsUseCase(contractRepository);
+    this.createPaymentUseCase = new CreatePaymentUseCase(contractRepository);
   }
 
   async getById(id: string) {
     return await this.getByIdUseCase.execute(id);
   }
 
-  async getAll() {
-    return await this.getAllUseCase.execute();
+  async getAll(filter?: ContractStatusFilter) {
+    return await this.getAllUseCase.execute(filter);
   }
 
-  async getMines(id: string, userType: "owner" | "tenant" = "owner") {
-    return await this.getMinesUseCase.execute(id, userType);
+  async getMines(id: string, userType: "owner" | "tenant" = "owner", filter?: ContractStatusFilter) {
+    return await this.getMinesUseCase.execute(id, userType, filter);
   }
 
-  async createContract(property: ContractToSave) {
-    return await this.createUseCase.execute(property);
+  async createContract(contract: ContractToSave) {
+    return await this.createUseCase.execute(contract);
   }
 
-  async updateContract(propertyId: ContractId, form: ContractToSave) {
-    return await this.updateUseCase.execute(propertyId, form);
+  async updateContract(contractId: ContractId, form: ContractToSave) {
+    return await this.updateUseCase.execute(contractId, form);
+  }
+
+  async signContract(contractId: string, role: "owner" | "tenant") {
+    return await this.signContractUseCase.execute(contractId, role);
+  }
+
+  async getPayments(contractId: string): Promise<Payment[]> {
+    return await this.getPaymentsUseCase.execute(contractId);
+  }
+
+  async addPayment(payment: Payment): Promise<string> {
+    return await this.createPaymentUseCase.execute(payment);
   }
 }

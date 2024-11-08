@@ -27,7 +27,7 @@ const globalSchema = yup.object().shape({
   centerOfImposition: yup.string().required("Ce champs est requis"),
   ville: yup.string().required("Ce champs est requis"),
   quartier: yup.string().required("Ce champs est requis"),
-  adresse: yup.string().required("Ce champs est requis"),
+  addresse: yup.string().required("Ce champs est requis"),
   usage: yup.string().required("Ce champs est requis"),
   type: yup.string().required("Ce champs est requis"),
   frequency: yup.string().required("Ce champs est requis"),
@@ -89,10 +89,10 @@ const EditProperty = () => {
   //images step
   const [files, setFiles] = useState([]);
 
-  //adresse step
+  //addresse step
   const [ville, setVille] = useState("");
   const [quartier, setQuartier] = useState("");
-  const [adresse, setAdresse] = useState("");
+  const [addresse, setaddresse] = useState("");
 
   //others informations step
   const [hasAssensor, setAssensor] = useState(false);
@@ -135,9 +135,9 @@ const EditProperty = () => {
     setNumberOfFloor(response.nombreEtage);
     setSurface(response.surface);
     setCenterOfImposition(response.centreImposition);
-    setVille(response.adress.city);
-    setQuartier(response.adress.quater);
-    setAdresse(response.adress.street);
+    setVille(response.address.city);
+    setQuartier(response.address.quater);
+    setaddresse(response.address.street);
     setAssensor(response.hasAssensor);
     setBalcony(response.hasBalcony);
     setCave(response.hasCave);
@@ -152,7 +152,7 @@ const EditProperty = () => {
     setIntercom(response.hasIntercom);
     setDiningRoom(response.hasDiningRoom);
     setGarbageChute(response.hasGrabageChute);
-    setPosition(response.adress.position );
+    setPosition(response.address.position );
     setUsage(response.usage);
     setCurrency(response.price.devise);
     setFrequence(response.frequence);
@@ -216,7 +216,7 @@ const EditProperty = () => {
             value: data.amount,
             currency,
           },
-          adress: {
+          address: {
             position: {
               latitude: position.lat,
               longitude: position.lng,
@@ -263,7 +263,7 @@ const EditProperty = () => {
       //   console.log(data);
       // });
       // await updateDocument("Proprietes", params.id, {
-      //   adresse: data.adresse,
+      //   addresse: data.addresse,
       //   type: data.type,
       //   centreImposition: data.centerOfImposition,
       //   description: data.description,
@@ -670,13 +670,13 @@ const EditProperty = () => {
                     register={register}
                   />
                   <Textinput
-                    label="Adresse"
-                    value={adresse}
-                    onChange={(e) => setAdresse(e.target.value)}
+                    label="addresse"
+                    value={addresse}
+                    onChange={(e) => setaddresse(e.target.value)}
                     type="text"
-                    placeholder="Entrer votre adresse"
-                    name="adresse"
-                    error={errors.adress}
+                    placeholder="Entrer votre addresse"
+                    name="addresse"
+                    error={errors.address}
                     register={register}
                   />
                 </div>

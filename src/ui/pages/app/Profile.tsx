@@ -102,7 +102,7 @@ const Profile = () => {
               error={errors.nom}
               onChange={(e) => setNom(e.target.value)}
               className="h-[48px]"
-              placeholder="Entrer votre adresse nom"
+              placeholder="Entrer votre addresse nom"
             />
             <Textinput
               name="prenom"
@@ -113,18 +113,18 @@ const Profile = () => {
               value={prenom}
               onChange={(e) => setPrenom(e.target.value)}
               className="h-[48px]"
-              placeholder="Entrer votre adresse prenom"
+              placeholder="Entrer votre addresse prenom"
             />
             <Textinput
               name="email"
-              label="Adresse email"
+              label="addresse email"
               type="email"
               register={register}
               error={errors.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="h-[48px]"
-              placeholder="Entrer votre adresse email"
+              placeholder="Entrer votre addresse email"
             />
             <Textinput
               name="telephone"
@@ -135,7 +135,7 @@ const Profile = () => {
               value={telephone}
               onChange={(e) => setTelephone(e.target.value)}
               className="h-[48px]"
-              placeholder="Entrer votre adresse telephone"
+              placeholder="Entrer votre addresse telephone"
             />
             <Textinput
               name="cni"
@@ -266,7 +266,7 @@ const Profile = () => {
                         LOCALISATION
                       </div>
                       <div className="text-base text-slate-600 dark:text-slate-50">
-                        {user?.adress}
+                        {user?.address}
                       </div>
                     </div>
                   </li>

@@ -4,14 +4,14 @@ import {VisitProperties} from "@/domains/visit/types";
 type Dates = {
   dateVisite: string;
   heureVisite: string;
-  statut: number;
+  status: number;
 }
 export type VisitFetched = {
   id: string;
   dates: Dates[];
   propietaireId: string;
   proprieteID: string;
-  statut: string;
+  status: string;
   userId: string;
   autreDetails: string;
 };
@@ -23,13 +23,13 @@ export class ApiVisit {
       dates: apiVisit.dates?.map((dateItem) => ({
         date: dateItem.dateVisite,
         hour: dateItem.heureVisite,
-        status: dateItem.statut
+        status: dateItem.status
       })) ?? [],
       details: apiVisit.autreDetails ?? "",
       tenantId: apiVisit.userId ?? "",
       ownerId: apiVisit.propietaireId ?? "",
       propertyId: apiVisit.proprieteID ?? "",
-      status: apiVisit.statut ?? 0,
+      status: apiVisit.status ?? 0,
     });
   }
 
@@ -40,7 +40,7 @@ export class ApiVisit {
       heureVisite: visit.time,
       propietaireId: visit.ownerId,
       propieteId: visit.propertyId,
-      statut: visit.status,
+      status: visit.status,
       userId: visit.tenantId,
     };
   }

@@ -20,6 +20,8 @@ export type ContractProperties = {
   ownerId: string;
   propertyId: string;
   paymentDate: string;
+  approvedByOwner: boolean;
+  approvedByTenant: boolean;
 };
 
 export type ContractToSave = Omit<ContractProperties, "id">;

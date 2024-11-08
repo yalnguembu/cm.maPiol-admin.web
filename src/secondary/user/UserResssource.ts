@@ -74,11 +74,11 @@ export class UserRessource implements UserRepository {
       collection: "Users",
       form: {
         typeUser: 3,
-        adresse: form.adress,
+        addresse: form.address,
         nom: form.lastname,
         prenom: form.firstname,
         cniNumber: form.idCardNumber,
-        email: form.adress,
+        email: form.address,
         profileImage: form.picture,
         telephone: form.phoneNumber,
         uid: userCreated.uid,

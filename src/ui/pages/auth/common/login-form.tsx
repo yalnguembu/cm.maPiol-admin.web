@@ -41,7 +41,8 @@ const LoginForm = () => {
     setIsLoading(true);
     try {
       const user = await userServices.login(email, password);
-      if (user.statut !== 1) {
+      console.log(user);
+      if (user.status !== 1) {
         toast.info(
           "Votre compte est inactif veillez contacter l'administrateur pour l'activer"
         );
@@ -77,7 +78,7 @@ const LoginForm = () => {
         value={email}
         onChange={(e) => setemail(e.target.value)}
         className="h-[48px]"
-        placeholder="Entrer votre adresse email"
+        placeholder="Entrer votre addresse email"
       />
       <Textinput
         name="password"

@@ -1,8 +1,8 @@
 import { PropertyId, PropertyProperties, PropertyType } from "./types";
 
-import { AdressProperties, MoneyProperties } from "../types";
+import { addressProperties, MoneyProperties } from "../types";
 import { Money } from "@/domains/Money";
-import { Adress } from "@/domains/Adress";
+import { address } from "@/domains/Address";
 
 export class Property {
   private constructor(
@@ -33,7 +33,7 @@ export class Property {
     private readonly nombrePieces: number,
     private readonly bathroomNumber: number,
     private readonly bedroomNumber: number,
-    private readonly _adress: AdressProperties,
+    private readonly _address: addressProperties,
     private readonly status: number,
     private readonly surface: number,
     private readonly type: PropertyType,
@@ -72,7 +72,7 @@ export class Property {
       nombrePieces,
       bathroomNumber,
       bedroomNumber,
-      adress,
+      address,
       status,
       surface,
       type,
@@ -110,7 +110,7 @@ export class Property {
       nombrePieces,
       bathroomNumber,
       bedroomNumber,
-      adress,
+      address,
       status,
       surface,
       type,
@@ -150,7 +150,7 @@ export class Property {
       nombrePieces: this.nombrePieces,
       bathroomNumber: this.bathroomNumber,
       bedroomNumber: this.bedroomNumber,
-      adress: this._adress,
+      address: this._address,
       status: this.status,
       surface: this.surface,
       type: this.type,
@@ -161,7 +161,7 @@ export class Property {
     };
   }
 
-  get adress(): Adress{
-    return new Adress(this._adress);
+  get address(): address{
+    return new address(this._address);
   }
 }

@@ -3,7 +3,7 @@ export type PositionProperties = {
     longitude: number;
   };
 
-export type AdressProperties = {
+export type addressProperties = {
   country?: string;
   city?: string;
   street?: string;

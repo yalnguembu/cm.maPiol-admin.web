@@ -28,10 +28,10 @@ export class ApiUser {
       phoneNumber: apiUser.telephone ?? "",
       idCardNumber: apiUser.cniNumber ?? "",
       picture: apiUser.photoProfil ?? "",
-      adress: apiUser.addresse ?? "",
+      address: apiUser.addresse ?? "",
       uid: apiUser.uid ?? "",
       userType: (apiUser.typeUsersId as unknown as UserType) ?? 0,
-      statut: apiUser.statut ?? 0,
+      status: apiUser.statut ?? 0,
       idCardPicture: apiUser.photoCNI ?? "",
       idCardExpirationDate: apiUser.CNIDateDelivrer ?? "",
     });
@@ -49,7 +49,7 @@ export class ApiUser {
       addresse: apiUser.address?.street,
       uid: apiUser.uid,
       typeUsersId: apiUser.userType,
-      statut: apiUser.statut ?? 0,
+      statut: apiUser.status ?? 0,
       photoCNI: apiUser.idCardPicture,
       CNIDateDelivrer: apiUser.idCardExpirationDate,
     };

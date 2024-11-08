@@ -41,7 +41,7 @@ export class VisitRessource implements VisitRepository {
     const visitCreatedId = await this.firebaseClient.addDocument({
       collection: "AgendaVisites",
       documentName: visitId,
-      form: {statut: 1},
+      form: {status: 1},
     });
     return visitCreatedId;
   }
@@ -50,7 +50,7 @@ export class VisitRessource implements VisitRepository {
     await this.firebaseClient.updateDocument({
       collection: "AgendaVisites",
       documentName: visitId,
-      form: {statut: 2},
+      form: {status: 2},
     });
   }
 

@@ -4,7 +4,7 @@ import { PropertyProperties } from "domains/property/types";
 
 export type PropertyFetched = {
   id: PropertyType;
-  adresse: string;
+  addresse: string;
   centreImposition: string;
   description: string;
   devise: string;
@@ -37,7 +37,7 @@ export type PropertyFetched = {
   };
   prix: number;
   quartier: string;
-  statut: number;
+  status: number;
   surface: number;
   type: PropertyType;
   usage: number;
@@ -45,6 +45,7 @@ export type PropertyFetched = {
   ville: string;
   images: string[];
   videoURL?: string;
+  nom?: string;
 };
 
 export class ApiProperty {
@@ -57,7 +58,7 @@ export class ApiProperty {
         value: apiProperty.prix ?? 0,
         currency: apiProperty.devise ?? "XAF",
       },
-      state: apiProperty.statut ?? 0,
+      state: apiProperty.status ?? 0,
       hasAssensor: apiProperty.existAscenseur ?? false,
       hasBalcony: apiProperty.existBalcon ?? false,
       hasCave: apiProperty.existCave ?? false,
@@ -80,8 +81,8 @@ export class ApiProperty {
       nombrePieces: apiProperty.nombrePieces ?? 0,
       bathroomNumber: apiProperty.nombreDouche ?? 0,
       bedroomNumber: apiProperty.nombreChambre ?? 0,
-      adress: {
-        street: apiProperty.adresse ?? "",
+      address: {
+        street: apiProperty.addresse ?? "",
         city: apiProperty.ville ?? "",
         country: "",
         quater: apiProperty.quartier ?? "",
@@ -90,13 +91,14 @@ export class ApiProperty {
           longitude: apiProperty.position?.lng ?? 0.0,
         },
       },
-      status: apiProperty.statut ?? 0,
+      status: apiProperty.status ?? 0,
       surface: apiProperty.surface ?? 0,
       type: apiProperty.type ?? 1,
       usage: apiProperty.usage ?? 0,
       userId: apiProperty.userId ?? "",
       images: apiProperty.images ?? [],
       video: apiProperty.videoURL ?? "",
+      name: apiProperty.nom??"",
     });
   }
   static fromProperties(
@@ -107,7 +109,7 @@ export class ApiProperty {
       description: apiProperty.description,
       prix: apiProperty.price.value,
       devise: apiProperty.price.currency,
-      statut: apiProperty.status,
+      status: apiProperty.status,
       existAscenseur: apiProperty.hasAssensor,
       existBalcon: apiProperty.hasBalcony,
       existCave: apiProperty.hasCave,
@@ -129,20 +131,21 @@ export class ApiProperty {
       nombrePieces: apiProperty.nombrePieces,
       nombreDouche: apiProperty.bathroomNumber,
       nombreChambre: apiProperty.bedroomNumber,
-      adresse: apiProperty.adress.street,
-      ville: apiProperty.adress.city,
-      quartier: apiProperty.adress.quater,
+      addresse: apiProperty.address.street,
+      ville: apiProperty.address.city,
+      quartier: apiProperty.address.quater,
       surface: apiProperty.surface,
       type: apiProperty.type,
       usage: apiProperty.usage,
       userId: apiProperty.userId,
       etat: apiProperty.state,
       position: {
-        lat: apiProperty.adress.position.latitude,
-        lng: apiProperty.adress.position.longitude,
+        lat: apiProperty.address.position.latitude,
+        lng: apiProperty.address.position.longitude,
       },
       images: apiProperty.images ?? [],
       videoURL: apiProperty.video,
+      nom: apiProperty.name,
     };
     const filtered = Object.entries(property)
       .filter(([key, value]) => value !== undefined && value !== "")

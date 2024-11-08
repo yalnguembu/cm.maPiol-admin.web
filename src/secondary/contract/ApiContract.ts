@@ -1,6 +1,7 @@
-import { Contract } from "@/domains/contract";
-import { ContractType } from "@/domains/contract/types";
-import { ContractProperties } from "@/domains/contract/types";
+import {Contract} from "@/domains/contract";
+import {ContractType} from "@/domains/contract/types";
+import {ContractProperties} from "@/domains/contract/types";
+import {Payment, PaymentProperties} from "@/domains/contract/Payment";
 
 export type ContractFetched = {
   dateDebutContrat: string;
@@ -20,6 +21,8 @@ export type ContractFetched = {
   proprieteId: string;
   id: ContractType;
   paiementDueDate: string;
+  approuveParLocatire: boolean;
+  approuveParProprietaire: boolean;
 };
 
 export class ApiContract {
@@ -54,8 +57,11 @@ export class ApiContract {
       paymentMethod: apiContract.moyentPayment,
       ownerId: apiContract.proprietaireId,
       propertyId: apiContract.proprieteId,
+      approvedByOwner: apiContract.approuveParProprietaire,
+      approvedByTenant: apiContract.approuveParLocatire,
     });
   }
+
   static fromProperties(
     contract: ContractProperties
   ): Omit<ContractFetched, "id"> {
@@ -76,6 +82,43 @@ export class ApiContract {
       moyentPayment: contract.paymentMethod,
       proprietaireId: contract.ownerId,
       proprieteId: contract.propertyId,
+      approuveParLocatire: contract.approvedByOwner,
+      approuveParProprietaire: contract.approvedByTenant,
     };
+  }
+}
+
+export type ApiPaymentProperties = {
+  montant: string;
+  devise: string;
+  mois: string;
+  annee: string;
+  contratId: string;
+  dateInitialisation: string;
+}
+
+export class ApiPayment {
+  static toDomain(payment: ApiPaymentProperties) {
+    return new Payment({
+      amount: {
+        value: payment.montant ?? 0,
+        currency: payment.devise ?? "XAF",
+      },
+      month: payment.mois ?? "",
+      year: payment.annee ?? "",
+      contractId: payment.contratId ?? "",
+      initialisationDate: payment.dateInitialisation ?? "",
+    })
+  }
+
+  static fromDomain(payment: Payment) {
+    return {
+      montant: payment.amount.value,
+      devise: payment.amount.currency,
+      mois: payment.month,
+      annee: payment.year,
+      contratId: payment.contractId,
+      dateInitialisation: payment.initialisationDate,
+    }
   }
 }

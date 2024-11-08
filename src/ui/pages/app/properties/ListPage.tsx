@@ -95,7 +95,7 @@ const PropertyGridList = () => {
           <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm pt-2">
             <Icon icon="heroicons-outline:map-pin" width="18" />
             <span className="ml-1">
-              {`${property?.adress?.street} ${property?.adress?.quater}, ${property?.adress?.city}`}
+              {`${property?.address?.street} ${property?.address?.quater}, ${property?.address?.city}`}
             </span>
           </div>
           <p className="dark:text-slate-200 text-slate-900 font-semibold base max-w-[100%] truncate mt-3">

@@ -71,7 +71,7 @@ const UserDetailsModal = (props: Props) => {
                 LOCALISATION
               </div>
               <div className="text-base text-slate-600 dark:text-slate-50">
-                {JSON.stringify(user?.adress)}
+                {JSON.stringify(user?.address)}
               </div>
             </div>
           </li>

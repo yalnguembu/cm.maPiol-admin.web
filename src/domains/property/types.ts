@@ -1,4 +1,4 @@
-import { MoneyProperties, AdressProperties } from "domains/types";
+import {MoneyProperties, addressProperties} from "domains/types";
 
 export type PropertyId = string;
 export type PropertyType = 0 | 1;
@@ -31,7 +31,7 @@ export type PropertyProperties = {
   nombrePieces: number;
   bathroomNumber: number;
   bedroomNumber: number;
-  adress: AdressProperties;
+  address: addressProperties;
   status: number;
   surface: number;
   type: PropertyType;
@@ -39,6 +39,7 @@ export type PropertyProperties = {
   userId: string;
   images: string[];
   video: string;
+  name: string;
 };
 
 export type PropertyToSave = Omit<PropertyProperties, "id" | "propertyType">;

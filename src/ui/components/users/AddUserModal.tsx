@@ -87,14 +87,14 @@ const AddUserModal = (props: Props) => {
         >
           <Textinput
             name="email"
-            label="Adresse email"
+            label="addresse email"
             type="email"
             register={register}
             error={errors.email}
             value={email}
             onChange={(event: InputEvent) => setEmail(event.target?.value)}
             className="h-[48px]"
-            placeholder="Entrer l'adresse email"
+            placeholder="Entrer l'addresse email"
           />
           <Textinput
             name="phoneNumber"
@@ -116,7 +116,7 @@ const AddUserModal = (props: Props) => {
             error={errors.firstname}
             onChange={(event: InputEvent) => setNom(event.target?.value)}
             className="h-[48px]"
-            placeholder="Entrer le adresse firstname"
+            placeholder="Entrer le addresse firstname"
           />
           <Textinput
             name="lastname"
@@ -127,7 +127,7 @@ const AddUserModal = (props: Props) => {
             value={lastname}
             onChange={(event: InputEvent) => setPrenom(event.target?.value)}
             className="h-[48px]"
-            placeholder="Entrer le adresse lastname"
+            placeholder="Entrer le addresse lastname"
           />
           <Textinput
             name="idCardNumber"

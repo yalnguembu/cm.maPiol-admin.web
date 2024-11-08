@@ -1,20 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Icon from "@/ui/components/ui/Icon";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Loading from "@/ui/components/Loading";
 import Tooltip from "@/ui/components/ui/Tooltip";
-import { useSelector } from "react-redux";
-import { ContractView } from "@/primary/contract/ContractView";
-import type { UserView } from "@/primary/user/UserView";
-import { DependeciesContext } from "@/utils/useDepedencies";
-import { PropertyType } from "@/domains/PropertyType";
-import { dateToString } from "@/utils/date";
+import {useSelector} from "react-redux";
+import {ContractView} from "@/primary/contract/ContractView";
+import type {UserView} from "@/primary/user/UserView";
+import {DependeciesContext} from "@/utils/useDepedencies";
+import {PropertyType} from "@/domains/PropertyType";
+import {dateToString} from "@/utils/date";
+import {ContractStatusFilter} from "@/domains/contract/enum";
 
-const ContractGridList = () => {
-  const { contractServices, userServices, propertyServices } =
+type ContractProperties = {
+  status: ContractStatusFilter
+}
+const ContractGridList = ({status}: ContractProperties) => {
+  const {contractServices, userServices, propertyServices} =
     useContext(DependeciesContext);
   const navigate = useNavigate();
-  const { isAdmin, isTenant, isOwner } = useSelector((state) => state.auth);
+  const {isAdmin, isTenant, isOwner} = useSelector((state) => state.auth);
   const [contracts, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,7 +28,7 @@ const ContractGridList = () => {
     tenantId: string;
   };
 
-  const Profile = ({ tenantId }: ProfileProps) => {
+  const Profile = ({tenantId}: ProfileProps) => {
     const [user, setUser] = useState<UserView>({});
 
     const fetchUser = async () => {
@@ -45,14 +49,15 @@ const ContractGridList = () => {
           children={
             <div className="flex items-center group w-min rounded-lg transition">
               <div className="w-10 h-10 rounded-full bg-gray-400">
-                <img src="" alt="" />
+                <img src="" alt=""/>
               </div>
               <div className="ml-2 mt-1">
-                <span className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
+                <span
+                  className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
                   {user?.fullName}
                 </span>
                 <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
-                  <Icon icon="heroicons-outline:at-symbol" width="14" />
+                  <Icon icon="heroicons-outline:at-symbol" width="14"/>
                   <span className="ml-1">{user?.email}</span>
                 </div>
               </div>
@@ -79,10 +84,11 @@ const ContractGridList = () => {
                 {user?.fullName}
               </span>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-2">
-                <Icon icon="heroicons-outline:at-symbol" width="14" />
+                <Icon icon="heroicons-outline:at-symbol" width="14"/>
                 <span className="ml-1">{user?.email}</span>
               </div>
-              <span className="text-xs block p-0 leading-4 mt-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
+              <span
+                className="text-xs block p-0 leading-4 mt-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
                 {/* membre depuis 2012 */}
               </span>
             </div>
@@ -96,7 +102,7 @@ const ContractGridList = () => {
     contract: ContractView;
   };
 
-  const ContractGridItem = ({ contract }: ContractGridItemProps) => {
+  const ContractGridItem = ({contract}: ContractGridItemProps) => {
     const [property, setProperty] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -110,7 +116,6 @@ const ContractGridList = () => {
       const response = await propertyServices.getPropertyById(
         contract.propertyId
       );
-      console.log(response);
       setProperty(response);
     };
 
@@ -148,15 +153,15 @@ const ContractGridList = () => {
 
     return (
       <div
-        onClick={() => navigate(`${isAdmin?'/admin/contracts' : isOwner ?'/owner/contracts': '/contracts'}/${contract?.id}`)}
+        onClick={() => navigate(`${isAdmin ? '/admin/contracts' : isOwner ? '/owner/contracts' : '/contracts'}/${contract?.id}`)}
         className="card rounded-md bg-white dark:bg-slate-800 hover:shadow-xl cursor-pointer p-4 px-6 flex flex-col gap-6 -y"
       >
         <div className="pt-3 flex items-center">
           <div className="w-12 h-12 bg-gray-400">
-            <img src={property?.images?.at(0)} alt={propertyType?.name} />
+            <img src={property?.images?.at(0)} alt={propertyType?.name}/>
           </div>
           {isLoading ? (
-            <Loading />
+            <Loading/>
           ) : (
             <div className="ml-2 mt-1">
               <Link
@@ -166,9 +171,9 @@ const ContractGridList = () => {
                 {propertyType?.name ?? ""}
               </Link>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm pt-2">
-                <Icon icon="heroicons-outline:map-pin" width="18" />
+                <Icon icon="heroicons-outline:map-pin" width="18"/>
                 <span className="ml-1">
-                  {property?.adress?.fullAdress ?? ""}
+                  {property?.address?.fulladdress ?? ""}
                 </span>
               </div>
             </div>
@@ -181,14 +186,14 @@ const ContractGridList = () => {
             ({frequencies[contract?.frequency]})
           </span>
           <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm pt-2">
-            <Icon icon="heroicons-outline:calendar" width="18" />
+            <Icon icon="heroicons-outline:calendar" width="18"/>
             <span className="ml-1 font-semibold">
               {dateToString(contract.startDate)} -{" "}
               {dateToString(contract.endDate)}
             </span>
           </div>
         </div>
-        {!isTenant && <Profile tenantId={contract.tenantId} />}
+        {!isTenant && <Profile tenantId={contract.tenantId}/>}
       </div>
     );
   };
@@ -197,7 +202,8 @@ const ContractGridList = () => {
     setIsLoading(true);
     const response = await contractServices.getMines(
       userId,
-      isOwner ? "owner" : isTenant ? "tenant" : ""
+      isOwner ? "owner" : isTenant ? "tenant" : "",
+      status
     );
     setProperties(response);
     setIsLoading(false);
@@ -205,7 +211,7 @@ const ContractGridList = () => {
 
   const fetchAllContracts = async () => {
     setIsLoading(true);
-    const response = await contractServices.getAll();
+    const response = await contractServices.getAll(status);
     setProperties(response);
     setIsLoading(false);
   };
@@ -237,11 +243,11 @@ const ContractGridList = () => {
         )}
       </div>
       {isLoading ? (
-        <Loading />
+        <Loading/>
       ) : contracts.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {contracts.map((contract) => (
-            <ContractGridItem key={contract.id} contract={contract} />
+            <ContractGridItem key={contract.id} contract={contract}/>
           ))}
         </div>
       ) : (

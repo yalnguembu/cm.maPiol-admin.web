@@ -4,7 +4,7 @@ import { Payment } from "@/domains/contract/types";
 export class CreatePaymentUseCase {
   constructor(private readonly contractRepository: ContractRepository) {}
 
-  async execute(form: Payment): Promise<void> {
-    await this.contractRepository.addPayment(form);
+  async execute(form: Payment): Promise<string> {
+    return await this.contractRepository.addPayment(form);
   }
 }

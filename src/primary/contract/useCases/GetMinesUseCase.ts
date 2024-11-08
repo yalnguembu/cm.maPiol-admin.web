@@ -1,14 +1,17 @@
-import { ContractRepository } from "domains/contract/repository/ContractRepository";
-import { ContractView } from "../ContractView";
+import {ContractRepository} from "domains/contract/repository/ContractRepository";
+import {ContractView} from "../ContractView";
+import {ContractStatusFilter} from "@/domains/contract/enum";
 
 export class GetMinesUseCase {
-  constructor(private readonly contractRepository: ContractRepository) {}
+  constructor(private readonly contractRepository: ContractRepository) {
+  }
 
   async execute(
     contractId: string,
-    userType: "owner" | "tenant"
+    userType: "owner" | "tenant",
+    filter?: ContractStatusFilter
   ): Promise<ContractView[]> {
-    const owners = await this.contractRepository.getMines(contractId, userType);
+    const owners = await this.contractRepository.getMines(contractId, userType, filter);
 
     return owners.map(ContractView.fromDomain);
   }

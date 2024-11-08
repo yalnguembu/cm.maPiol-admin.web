@@ -100,7 +100,7 @@ const AddContract = () => {
     name: yup.string().required("Ce champs est requis"),
     email: yup
       .string()
-      .email("Adresse email invalide")
+      .email("addresse email invalide")
       .required("Ce champs est requis"),
     password: yup
       .string()

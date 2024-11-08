@@ -9,15 +9,15 @@ export type UserProperties = {
   phoneNumber: string;
   idCardNumber: string;
   picture?: string;
-  adress?: string;
+  address?: string;
   userType?: UserType;
   uid: string;
-  statut?: number;
+  status?: number;
   idCardPicture?: string;
   idCardExpirationDate?: string;
   password?: string;
 };
 
-export type UserToSave = Omit<UserProperties, "id" | "uid" | "userType" | "statut">;
+export type UserToSave = Omit<UserProperties, "id" | "uid" | "userType" | "status">;
 
 export type AddAdditionnalInfos = Pick<UserProperties, "idCardNumber" | "phoneNumber" | "idCardPicture" | "idCardExpirationDate">;

@@ -1,6 +1,6 @@
 import { Property } from "@/domains/property";
 import { PropertyId, PropertyType } from "@/domains/property/types";
-import { AdressProperties, MoneyProperties } from "domains/types";
+import { addressProperties, MoneyProperties } from "domains/types";
 
 export class PropertyView {
   private constructor(
@@ -31,7 +31,7 @@ export class PropertyView {
     readonly nombrePieces: number,
     readonly bathroomNumber: number,
     readonly bedroomNumber: number,
-    readonly adress: AdressProperties,
+    readonly address: addressProperties,
     readonly status: number,
     readonly surface: string,
     readonly type: PropertyType,
@@ -70,7 +70,7 @@ export class PropertyView {
       nombrePieces,
       bathroomNumber,
       bedroomNumber,
-      adress,
+      address,
       status,
       surface,
       type,
@@ -108,7 +108,7 @@ export class PropertyView {
       nombrePieces,
       bathroomNumber,
       bedroomNumber,
-      adress,
+      address,
       status,
       surface,
       type,

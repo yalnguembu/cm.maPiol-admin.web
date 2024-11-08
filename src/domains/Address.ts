@@ -1,4 +1,4 @@
-import { AdressProperties, PositionProperties } from "./types";
+import { addressProperties, PositionProperties } from "./types";
 
 class Position {
   constructor(private readonly position: PositionProperties) {}
@@ -20,45 +20,45 @@ class Position {
   }
 }
 
-export class Adress {
-  constructor(private readonly adress: AdressProperties) {}
+export class address {
+  constructor(private readonly address: addressProperties) {}
 
   get country(): string {
-    return this.adress.country ?? "";
+    return this.address.country ?? "";
   }
 
   set country(country: string) {
-    this.adress.country = country ?? "";
+    this.address.country = country ?? "";
   }
 
   get city(): string {
-    return this.adress.city ?? "";
+    return this.address.city ?? "";
   }
 
   set city(city: string) {
-    this.adress.city = city ?? "";
+    this.address.city = city ?? "";
   }
 
   get street(): string {
-    return this.adress.street ?? "";
+    return this.address.street ?? "";
   }
 
   set street(street: string) {
-    this.adress.street = street ?? "";
+    this.address.street = street ?? "";
   }
 
-  get fullAdress(): string {
+  get fulladdress(): string {
     return `${this.country && this.country + ","} ${
       this.city && this.city + ","
     } ${this.street && this.street + ","}`;
   }
 
   get position(): Position {
-    return new Position(this.adress.position);
+    return new Position(this.address.position);
   }
 
   set position(position: PositionProperties) {
-    this.adress.position.latitude = position.latitude ?? 0;
-    this.adress.position.longitude = position.longitude ?? 0;
+    this.address.position.latitude = position.latitude ?? 0;
+    this.address.position.longitude = position.longitude ?? 0;
   }
 }

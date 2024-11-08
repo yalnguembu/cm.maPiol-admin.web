@@ -8,13 +8,15 @@ import Loading from "@/ui/components/Loading";
 import {PropertyView} from "@/primary/property/PropertyView";
 import {dateToString} from "@/utils/date";
 import Payments from "./Payments";
-import Checkbox from "@/ui/components/ui/Checkbox";
 import Icon from "../../../components/ui/Icon";
+import {useSelector} from "react-redux";
+import SignContractModal from "@/ui/components/SignContractModal";
 
 const ContractDetails = () => {
   const {contractServices, userServices, propertyServices} =
     useContext(DependeciesContext);
   const navigate = useNavigate();
+  const {isTenant, isOwner} = useSelector((state) => state.auth);
   const [contract, setContract] = useState<ContractView>({});
   const [isLoading, setIsLoading] = useState(false);
   const [tenant, setTenant] = useState<UserView>({});
@@ -24,9 +26,14 @@ const ContractDetails = () => {
   const userId = localStorage.getItem("Useruid") ?? "";
 
   const [shouldDisplayPayments, setShouldDisplayPayments] = useState(false);
+  const [shouldSignContract, setShouldSignContract] = useState(false);
 
   const toggleDisplayPayments = () =>
     setShouldDisplayPayments(!shouldDisplayPayments);
+
+
+  const toggleSignContract = () =>
+    setShouldSignContract(!shouldSignContract);
 
   const params = useParams();
 
@@ -34,7 +41,6 @@ const ContractDetails = () => {
     setIsLoading(true);
     const response = await contractServices.getById(params.id);
     setContract(response);
-    console.log(response);
 
     const ownerResponse: UserView = response.ownerId
       ? await userServices?.getUserByUUID(response.ownerId)
@@ -58,6 +64,22 @@ const ContractDetails = () => {
     fetchContractDetails();
   }, []);
 
+  const [isSigning, setIsSigning] = useState(false);
+  const signContract = async () => {
+    setIsSigning(true);
+    if (isOwner) {
+      await contractServices?.signContract(contract.id, "owner");
+      if (contract.approvedByTenant) await contractServices.update({status: 2})
+    } else {
+      await contractServices?.signContract(contract.id, "tenant");
+      if (contract.approvedByOwner) await contractServices.update({status: 2})
+
+    }
+    setIsSigning(false);
+    toggleSignContract();
+    await fetchContractDetails();
+  }
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -69,15 +91,17 @@ const ContractDetails = () => {
           />
           <span>Details du contrat</span>
         </div>
-        {(contract.ownerId === userId || contract.tenantId === userId) &&
-          contract.status === 2 && (
+        {
+          (contract.ownerId === userId || contract.tenantId === userId) &&
+          (contract.approvedByOwner && contract.approvedByTenant) && (
             <Button
               onClick={toggleDisplayPayments}
               icon="heroicons-outline:banknotes"
               text="Paiments"
               className="bg-[#a6837b] text-white flex space-x-3 rounded justify-center items-center px-6 py-3"
             />
-          )}
+          )
+        }
       </div>
 
       {isLoading ? (
@@ -91,7 +115,7 @@ const ContractDetails = () => {
             <div className="mb-2">
               <p className="text-lg text-[#192340] p-2">
                 {owner.fullName} , titulaire de la CNI N° {owner.idCardNumber}{" "}
-                délivrée le {owner.id}, Tél : {owner.phoneNumber}
+                délivrée le {owner.idCardExpirationDate}, Tél : {owner.phoneNumber}
               </p>
               <p className="text-xl font-semibold text-[#666] mt-2">
                 dénommée LE BAILLEUR
@@ -104,7 +128,7 @@ const ContractDetails = () => {
             <div className="mb-2">
               <p className="text-lg text-[#192340] p-2">
                 {tenant.fullName} , titulaire de la CNI N° {tenant.idCardNumber}{" "}
-                délivrée le {tenant.id}, Tél : {tenant.phoneNumber}
+                délivrée le {tenant.idCardExpirationDate}, Tél : {tenant.phoneNumber}
               </p>
               <p className="text-xl font-semibold text-[#666] mt-2">
                 dénommée LE LOCATAIRE
@@ -124,7 +148,7 @@ const ContractDetails = () => {
               </p>
               <p className="text-lg text-[#192340] p-2">
                 Le Bailleur loue au Locataire, qui accepte, les locaux situés à{" "}
-                {property.adress?.street}, désignés ci-après {property.type}. Le
+                {property.address?.street}, désignés ci-après {property.type}. Le
                 Bien est loué à usage
                 {property.usage}. exclusivement.
               </p>
@@ -248,10 +272,10 @@ const ContractDetails = () => {
             </div>
 
             <p className="font-semibold text-xl text-primary-700 mt-2">
-              Statut du Contrat
+              status du Contrat
             </p>
             <div className="mb-2">
-              <p className="text-lg text-[#192340] p-2">Statut:</p>
+              <p className="text-lg text-[#192340] p-2">status:</p>
               <p
                 className={`text-xl font-semibold text-[#666] mt-2 ${
                   contract.contractStatus === "Actif"
@@ -261,32 +285,47 @@ const ContractDetails = () => {
               </p>
             </div>
           </div>
-          <div className="flex items-center">
-            <Icon icon="heroicons:check"/>
+          <div className="flex items-center gap-x-1">
+            <Icon icon={contract.approvedByOwner ? "heroicons:check" : "heroicons:x-mark"}/>
             <span>
               Approuver par le bailleur
             </span>
           </div>
-          <Checkbox
-            value={false}
-            onChange={() => {
-            }}
-            label="Approuver par le locataire"
-          />
-          <div className="w-full flex py-4 justify-end">
-            <Button
-              onClick={toggleDisplayPayments}
-              icon="heroicons-outline:check"
-              text="J'ai lu et j'approuve"
-              className="btn bg-slate-500 text-white flex space-x-3 rounded justify-center items-center px-6 py-3"
-            />
+          <div className="flex items-center gap-x-1">
+            <Icon icon={contract.approvedByTenant ? "heroicons:check" : "heroicons:x-mark"}/>
+            <span>
+              Approuver par le locataire
+            </span>
+          </div>
+          <div className="w-full py-4">
+            {
+              ((isTenant && !contract.approvedByTenant) || (isOwner && !contract.approvedByOwner)) && (<Button
+                onClick={toggleSignContract}
+                icon="heroicons-outline:check"
+                text="J'ai lu et j'approuve"
+                className="btn bg-slate-800 text-white flex space-x-3 rounded justify-center items-center px-6 py-3"
+              />)
+            }
+
           </div>
         </>
       )}
-      <Payments
-        isActive={shouldDisplayPayments}
-        onClose={toggleDisplayPayments}
-      />
+      {
+        shouldDisplayPayments &&
+        <Payments
+          isActive={shouldDisplayPayments}
+          onClose={toggleDisplayPayments}
+          contractId={contract.id}
+        />
+      }
+      {
+        shouldSignContract &&
+        <SignContractModal
+          onConfirm={signContract}
+          isActive={shouldSignContract}
+          onClose={toggleSignContract}
+          isLoading={isSigning}/>
+      }
     </div>
   );
 };

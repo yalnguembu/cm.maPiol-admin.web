@@ -177,7 +177,7 @@ const VisitGridList = () => {
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm pt-2">
                 <Icon icon="heroicons-outline:map-pin" width="18"/>
                 <span className="ml-1">
-                  {`${property?.adresse ?? ""} ${property?.quartier ?? ""}, ${
+                  {`${property?.addresse ?? ""} ${property?.quartier ?? ""}, ${
                     property?.ville ?? ""
                   }`}
                 </span>

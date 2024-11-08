@@ -1,6 +1,6 @@
-import { Contract } from "@/domains/contract";
-import {  } from "@/domains/contract/types";
-import { MoneyProperties } from "domains/types";
+import {Contract} from "@/domains/contract";
+import {} from "@/domains/contract/types";
+import {MoneyProperties} from "domains/types";
 
 export class ContractView {
   private constructor(
@@ -19,7 +19,11 @@ export class ContractView {
     readonly paymentMethod: string,
     readonly ownerId: string,
     readonly propertyId: string,
-  ) {}
+    readonly approvedByOwner: boolean,
+    readonly approvedByTenant: boolean,
+    readonly status: number,
+  ) {
+  }
 
   static fromDomain(properties: Contract) {
     const {
@@ -38,6 +42,9 @@ export class ContractView {
       paymentMethod,
       ownerId,
       propertyId,
+      approvedByOwner,
+      approvedByTenant,
+      status
     } = properties.properties;
 
     return new ContractView(
@@ -56,6 +63,9 @@ export class ContractView {
       paymentMethod,
       ownerId,
       propertyId,
+      approvedByOwner,
+      approvedByTenant,
+      status,
     );
   }
 }

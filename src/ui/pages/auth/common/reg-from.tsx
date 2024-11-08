@@ -98,7 +98,7 @@ const RegisterForm = ({ next }: RegisterFormProps) => {
         value={email}
         onChange={(e) => setemail(e.target.value)}
         className="h-[48px]"
-        placeholder="Entrer votre adresse email"
+        placeholder="Entrer votre addresse email"
       />
       <Textinput
         name="password"

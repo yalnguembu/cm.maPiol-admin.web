@@ -10,9 +10,11 @@ export class UserView {
     readonly phoneNumber: string,
     readonly idCardNumber: string,
     readonly picture: string,
-    readonly adress: string,
+    readonly address: string,
     readonly userType: UserType,
-    readonly statut: number,
+    readonly status: number,
+    readonly idCardPicture: string,
+    readonly idCardExpirationDate: string
   ) {}
 
   static fromDomain(properties: User) {
@@ -24,9 +26,11 @@ export class UserView {
       phoneNumber,
       idCardNumber,
       picture,
-      adress,
+      address,
       userType,
-      statut,
+      status,
+      idCardPicture,
+      idCardExpirationDate
     } = properties.properties;
 
     return new UserView(
@@ -37,9 +41,11 @@ export class UserView {
       phoneNumber,
       idCardNumber,
       picture,
-      adress,
+      address,
       userType,
-      statut
+      status,
+      idCardPicture,
+      idCardExpirationDate
     );
   }
 

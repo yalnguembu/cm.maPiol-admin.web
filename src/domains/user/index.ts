@@ -9,10 +9,10 @@ export class User {
     private readonly phoneNumber: string,
     private readonly idCardNumber: string,
     private readonly picture: string,
-    private readonly adress: string,
+    private readonly address: string,
     private readonly userType: UserType,
     private readonly uid: string,
-    private readonly statut: number,
+    private readonly status: number,
     private readonly idCardPicture: string,
     private readonly idCardExpirationDate: string
   ) {}
@@ -26,10 +26,10 @@ export class User {
       phoneNumber = "",
       idCardNumber = "",
       picture = "",
-      adress = "",
+      address = "",
       userType = 0,
       uid = "",
-      statut = 0,
+      status = 0,
       idCardPicture = "",
       idCardExpirationDate = "",
     } = properties;
@@ -42,10 +42,10 @@ export class User {
       phoneNumber,
       idCardNumber,
       picture,
-      adress,
+      address,
       userType,
       uid,
-      statut,
+      status,
       idCardPicture,
       idCardExpirationDate
     );
@@ -60,10 +60,10 @@ export class User {
       phoneNumber: this.phoneNumber,
       idCardNumber: this.idCardNumber,
       picture: this.picture,
-      adress: this.adress,
+      address: this.address,
       userType: this.userType,
       uid: this.uid,
-      statut: this.statut,
+      status: this.status,
       idCardPicture: this.idCardPicture,
       idCardExpirationDate: this.idCardExpirationDate,
     };

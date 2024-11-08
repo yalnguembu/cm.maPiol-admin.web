@@ -88,7 +88,7 @@ const EditUserModal = (props: Props) => {
             error={errors.lastname}
             onChange={(e) => setNom(e.target.value)}
             className="h-[48px]"
-            placeholder="Entrer le adresse nom"
+            placeholder="Entrer le addresse nom"
           />
           <Textinput
             name="firstname"
@@ -99,18 +99,18 @@ const EditUserModal = (props: Props) => {
             value={firstname}
             onChange={(e) => setPrenom(e.target.value)}
             className="h-[48px]"
-            placeholder="Entrer le adresse prenom"
+            placeholder="Entrer le addresse prenom"
           />
           <Textinput
             name="email"
-            label="Adresse email"
+            label="addresse email"
             type="email"
             register={register}
             error={errors.email}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="h-[48px]"
-            placeholder="Entrer le adresse email"
+            placeholder="Entrer le addresse email"
           />
           <Textinput
             name="phoneNumber"

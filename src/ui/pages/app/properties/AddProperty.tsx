@@ -1,20 +1,20 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {useContext, useState, useEffect} from "react";
 import Textinput from "@/ui/components/ui/Textinput";
 import Textarea from "@/ui/components/ui/Textarea";
 import Button from "@/ui/components/ui/Button";
 import Card from "@/ui/components/ui/Card";
 import Icon from "@/ui/components/ui/Icon";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "@/ui/components/ui/Select";
 import DropZone from "@/ui/components/partials/DropZone";
 import Checkbox from "@/ui/components/ui/Checkbox";
 import GoogleMapReact from "google-map-react";
 import imgMaker from "../../../assets/images/marker.png";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import InputGroup from "@/ui/components/ui/InputGroup";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import {DependeciesContext} from "@/utils/useDepedencies";
 
 const steps = [
   {
@@ -65,13 +65,13 @@ const otherSchema = yup.object().shape({
 });
 
 const frequencies = [
-  { value: "Jours", label: "Jours" },
-  { value: "Semaines", label: "Semaines" },
-  { value: "Mois", label: "Mois" },
-  { value: "Annee", label: "Annee" },
+  {value: "Jours", label: "Jours"},
+  {value: "Semaines", label: "Semaines"},
+  {value: "Mois", label: "Mois"},
+  {value: "Annee", label: "Annee"},
 ];
 const AddProperty = () => {
-  const { propertyServices } = useContext(DependeciesContext);
+  const {propertyServices} = useContext(DependeciesContext);
   const navigate = useNavigate();
   const [stepNumber, setStepNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,10 +96,10 @@ const AddProperty = () => {
   //images step
   const [files, setFiles] = useState([]);
 
-  //adresse step
+  //addresse step
   const [ville, setVille] = useState("");
   const [quartier, setQuartier] = useState("");
-  const [street, setAdresse] = useState("");
+  const [street, setaddresse] = useState("");
 
   //images step
 
@@ -119,10 +119,10 @@ const AddProperty = () => {
   const [hasDiningRoom, setDiningRoom] = useState(false);
   const [hasGrabageChute, setGarbageChute] = useState(false);
 
-  const [position, setPosition] = useState({ lat: 51.505, lng: -0.09 });
+  const [position, setPosition] = useState({lat: 51.505, lng: -0.09});
 
-  const handleMapClick = ({ lat, lng }) => {
-    setPosition({ lat, lng });
+  const handleMapClick = ({lat, lng}) => {
+    setPosition({lat, lng});
   };
   useEffect(() => {
     // Fonction pour obtenir la position actuelle de l'utilisateur
@@ -130,8 +130,8 @@ const AddProperty = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude } = position.coords;
-            setPosition({ lat: latitude, lng: longitude });
+            const {latitude, longitude} = position.coords;
+            setPosition({lat: latitude, lng: longitude});
           },
           (error) => {
             console.error("Error obtaining location:", error);
@@ -167,11 +167,12 @@ const AddProperty = () => {
     default:
       currentStepSchema = basicInformations;
   }
-  useEffect(() => {}, [stepNumber]);
+  useEffect(() => {
+  }, [stepNumber]);
 
   const {
     register,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
   } = useForm({
     resolver: yupResolver(currentStepSchema),
@@ -190,6 +191,7 @@ const AddProperty = () => {
 
     if (isLastStep) {
       setIsLoading(true);
+      const propertyName = (types.find((propertyType) => type == propertyType.value))?.label;
 
       try {
         await propertyServices.createProperty(
@@ -203,7 +205,7 @@ const AddProperty = () => {
               value: data.amount,
               currency,
             },
-            adress: {
+            address: {
               position: {
                 latitude: position.lat,
                 longitude: position.lng,
@@ -236,6 +238,7 @@ const AddProperty = () => {
             hasIntercom: hasIntercom,
             hasDiningRoom: hasDiningRoom,
             hasGrabageChute: hasGrabageChute,
+            name: propertyName,
           },
           files
         );
@@ -251,12 +254,12 @@ const AddProperty = () => {
   };
 
   const usages = [
-    { value: "0", label: "Residentiel" },
-    { value: "1", label: "Commercial" },
+    {value: "0", label: "Residentiel"},
+    {value: "1", label: "Commercial"},
   ];
   const currencies = [
-    { value: "XAF", label: "XAF" },
-    { value: "USD", label: "USD" },
+    {value: "XAF", label: "XAF"},
+    {value: "USD", label: "USD"},
   ];
 
   const [residentialTypes, setResidentialTypes] = useState([]);
@@ -265,14 +268,14 @@ const AddProperty = () => {
   const fecthResidentialType = async () => {
     const types = await propertyServices.getResidentialTypes();
     setResidentialTypes(
-      types.map((type) => ({ value: type.id, label: type.name }))
+      types.map((type) => ({value: type.id, label: type.name}))
     );
   };
 
   const fecthCommercialType = async () => {
     const types = await propertyServices.getCommertialTypes();
 
-    setCommercial(types.map((type) => ({ value: type.id, label: type.name })));
+    setCommercial(types.map((type) => ({value: type.id, label: type.name})));
   };
 
   useEffect(() => {
@@ -349,7 +352,7 @@ const AddProperty = () => {
                         <span> {i + 1}</span>
                       ) : (
                         <span className="text-3xl">
-                          <Icon icon="bx:check-double" />
+                          <Icon icon="bx:check-double"/>
                         </span>
                       )}
                     </div>
@@ -538,7 +541,7 @@ const AddProperty = () => {
                       </h4>
                     </div>
                     <div className="h-full lg:col-span-3 md:col-span-2 col-span-1">
-                      <DropZone value={files} onChange={setFiles} />
+                      <DropZone value={files} onChange={setFiles}/>
                     </div>
                   </div>
                 </div>
@@ -573,11 +576,11 @@ const AddProperty = () => {
                       register={register}
                     />
                     <Textinput
-                      label="Adresse"
+                      label="addresse"
                       value={street}
-                      onChange={(e) => setAdresse(e.target.value)}
+                      onChange={(e) => setaddresse(e.target.value)}
                       type="text"
-                      placeholder="Entrer votre adresse"
+                      placeholder="Entrer votre addresse"
                       name="street"
                       error={errors.street}
                       register={register}
@@ -587,7 +590,7 @@ const AddProperty = () => {
                     </label>
                     <div
                       className=""
-                      style={{ height: "400px", width: "100%" }}
+                      style={{height: "400px", width: "100%"}}
                     >
                       <GoogleMapReact
                         bootstrapURLKeys={{

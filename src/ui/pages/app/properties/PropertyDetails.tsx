@@ -220,7 +220,7 @@ const PropertyDetails = () => {
                 key={index}
                 alt={`${property?.nomPropriete} images ${index}`}
                 src={image}
-                fetchpriority="low"
+                fetchPriority="low"
                 loading="lazy"
                 className=" h-16 w-16  object-cover rounded-md"
               />
@@ -379,9 +379,9 @@ const PropertyDetails = () => {
                 <div className="flex  items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
                   <Icon icon="heroicons-outline:map-pin" width="16" />
                   <span className="ml-1">
-                    {`${property?.adress?.street ?? ""} ${
-                      property?.adress?.quater ?? ""
-                    }, ${property?.adress?.city ?? ""}`}
+                    {`${property?.address?.street ?? ""} ${
+                      property?.address?.quater ?? ""
+                    }, ${property?.address?.city ?? ""}`}
                   </span>
                 </div>
                 <p className="dark:text-slate-200 text-lg text-slate-900 font-semibold base max-w-[100%] truncate mt-3">
@@ -436,12 +436,12 @@ const PropertyDetails = () => {
                         bootstrapURLKeys={{
                           key: "AIzaSyBYNu1iWbxlkTCf87GlV2xYjkcbv5I0vzI",
                         }}
-                        center={property?.adress?.position}
+                        center={property?.address?.position}
                         defaultZoom={13}
                       >
                         <Marker
-                          lat={property?.adress?.position?.latitude ?? 0}
-                          lng={property?.adress?.position?.longitude ?? 0}
+                          lat={property?.address?.position?.latitude ?? 0}
+                          lng={property?.address?.position?.longitude ?? 0}
                           text="My Marker"
                         />
                       </GoogleMapReact>

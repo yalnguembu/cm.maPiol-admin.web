@@ -21,6 +21,8 @@ export class Contract {
     private readonly paymentMethod: string,
     private readonly ownerId: string,
     private readonly propertyId: string,
+    private readonly approvedByOwner: boolean,
+    private readonly approvedByTenant: boolean,
   ) {}
 
   static fromProperties(properties: ContractProperties) {
@@ -41,6 +43,8 @@ export class Contract {
       paymentMethod,
       ownerId,
       propertyId,
+      approvedByOwner,
+      approvedByTenant,
     } = properties;
 
     return new Contract(
@@ -60,6 +64,8 @@ export class Contract {
       paymentMethod,
       ownerId,
       propertyId,
+      approvedByOwner,
+      approvedByTenant,
     );
   }
 
@@ -81,6 +87,8 @@ export class Contract {
       paymentMethod: this.paymentMethod,
       ownerId: this.ownerId,
       propertyId: this.propertyId,
+      approvedByOwner: this.approvedByOwner,
+      approvedByTenant: this.approvedByTenant,
     };
   }
 }
