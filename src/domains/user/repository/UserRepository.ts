@@ -1,10 +1,10 @@
-import { User } from "..";
-import { UserToSave } from "../types";
+import type { User } from "..";
+import type { UserToSave } from "../types";
 
 export interface UserRepository {
   createAdmin(form: UserToSave): Promise<string>;
 
-  addAdditionnalInfos(userId: string, form: UserToSave): Promise<string>;
+  addAdditionalInfos(userId: string, form: UserToSave): Promise<string>;
 
   createOwner(form: UserToSave): Promise<string>;
 

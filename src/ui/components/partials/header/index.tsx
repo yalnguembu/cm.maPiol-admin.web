@@ -91,9 +91,9 @@ const Header = ({ className = "custom-class" }) => {
                   )}
                 </button>
               )}
-              {width < breakpoints.xl && <Logo />}
+              {width < breakpoints.lg && <Logo />}
               {/* open mobile menu handlaer*/}
-              {width < breakpoints.xl && width >= breakpoints.md && (
+              {width < breakpoints.lg && width >= breakpoints.md && (
                 <div
                   className="cursor-pointer text-slate-900 dark:text-white text-2xl"
                   onClick={handleOpenMobileMenu}

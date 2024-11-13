@@ -14,7 +14,7 @@ import imgMaker from "../../../assets/images/marker.png";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "@/ui/components/Loading";
 import InputGroup from "@/ui/components/ui/InputGroup";
-import { useDepedencies } from "@/utils/useDepedencies";
+import {ServicesContext, useDependencies} from "@/utils/useDependencies";
 
 const globalSchema = yup.object().shape({
   name: yup.string().required("Ce champs est requis"),
@@ -41,7 +41,7 @@ const frequencies = [
 ];
 
 const EditProperty = () => {
-  const { propertyServices } = useDepedencies();
+  const { propertyServices } = useDependencies<ServicesContext>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -59,7 +59,7 @@ const EditProperty = () => {
   const [currency, setCurrency] = useState("");
   const [type, setType] = useState("");
   const [types, setTypes] = useState([]);
-  const [frequence, setFrequence] = useState("");
+  const [frequency, setFrequence] = useState("");
 
   const usages = [
     { value: "0", label: "Residentiel" },
@@ -155,7 +155,7 @@ const EditProperty = () => {
     setPosition(response.address.position );
     setUsage(response.usage);
     setCurrency(response.price.devise);
-    setFrequence(response.frequence);
+    setFrequence(response.frequency);
     setAmount(response.price.value);
     setNumberOfBedRoom(response.bedroomNumber);
     setNumberOfBath(response.bathroomNumber);
@@ -228,7 +228,7 @@ const EditProperty = () => {
           surface: data.surface,
           type: data.type,
           usage: data.usage,
-          frequence,
+          frequency,
           numberOfBuilding: data.numberOfBuilding,
           nombreEscalier: data.nombreEscalier,
           nombreEtage: data.nombreEtage,
@@ -294,7 +294,7 @@ const EditProperty = () => {
       //   },
       //   surface: data.surface,
       //   userId,
-      //   frequence: data.frequency,
+      //   frequency: data.frequency,
       //   ville: data.ville,
       //   quartier: data.quartier,
       // });
@@ -389,9 +389,9 @@ const EditProperty = () => {
                   />
                   <Select
                     label="Frequence"
-                    value={frequence}
+                    value={frequency}
                     onChange={(e) => setFrequence(e.target.value)}
-                    placeholder="Selectionnez la frequence"
+                    placeholder="Selectionnez la frequency"
                     error={errors.frequency}
                     register={register}
                     options={frequencies}

@@ -1,18 +1,18 @@
 import React from "react";
 
 const Fileinput = ({
-  name,
-  label,
-  onChange,
-  placeholder,
-  preview,
-  accept = "choose",
-  className = "custom-class",
-  id,
-  required,
-  selectedFile,
-  register,
-}) => {
+                     name,
+                     label,
+                     onChange,
+                     placeholder,
+                     preview,
+                     accept = "choose",
+                     className = "custom-class",
+                     id,
+                     required,
+                     selectedFile,
+                     register,
+                   }) => {
   return (
     <div>
       <div className="filegroup">
@@ -64,21 +64,26 @@ const Fileinput = ({
                   {placeholder}
                 </span>
               </div>
-            ) : (
+            ) : !preview ?
+              <div className="border-2 border-dashed rounded-md w-full h-full p-4 flex justify-center items-center">
+                <span className="text-gray-500 font-semibold text-center">
+                  {JSON.stringify(selectedFile)}
+                </span>
+              </div> :
               preview &&
-              selectedFile && (
+              (
                 <img
                   src={selectedFile ? URL.createObjectURL(selectedFile) : ""}
                   className="w-full  h-full block object-contain rounded-md my-2 border border-slate-200"
                   alt={selectedFile?.name}
                 />
-              )
-            )}
+              )}
           </div>
         </label>
       </div>
     </div>
-  );
+  )
+    ;
 };
 
 export default Fileinput;

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useDepedencies } from "@/utils/useDepedencies";
+import { useDependencies } from "@/utils/useDependencies";
 
 type Props = {
   onCreated: () => Promise<void>;
@@ -15,7 +15,7 @@ type Props = {
 };
 const AddUserModal = (props: Props) => {
   const { onCreated, isActive, onClose } = props;
-  const { userServices } = useDepedencies();
+  const { userServices } = useDependencies();
 
   const [email, setEmail] = useState<string>("");
   const [firstname, setNom] = useState<string>("");

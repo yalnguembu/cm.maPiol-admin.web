@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import Button from "@/ui/components/ui/Button";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {UserView} from "@/primary/user/UserView";
 import {ContractView} from "@/primary/contract/ContractView";
 import Loading from "@/ui/components/Loading";
@@ -14,7 +14,7 @@ import SignContractModal from "@/ui/components/SignContractModal";
 
 const ContractDetails = () => {
   const {contractServices, userServices, propertyServices} =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const {isTenant, isOwner} = useSelector((state) => state.auth);
   const [contract, setContract] = useState<ContractView>({});

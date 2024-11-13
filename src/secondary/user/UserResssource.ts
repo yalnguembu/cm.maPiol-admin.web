@@ -1,13 +1,14 @@
-import { User } from "@/domains/user";
-import { ApiUser, UserFetched } from "./ApiUser";
-import { UserRepository } from "@/domains/user/repository/UserRepository";
-import { UserToSave } from "@/domains/user/types";
-import { FirebaseClient } from "@/secondary/FirebaseClient";
-import { auth } from "@/utils/configs/firebase";
-import { AddAdditionnalInfos } from "@/domains/user/types";
+import {User} from "@/domains/user";
+import {ApiUser, UserFetched} from "./ApiUser";
+import {UserRepository} from "@/domains/notification/repository/NotificationRepository";
+import {UserToSave} from "@/domains/user/types";
+import {FirebaseClient} from "@/secondary/FirebaseClient";
+import {auth} from "@/utils/configs/firebase";
+import {AddAdditionalInfos} from "@/domains/user/types";
 
 export class UserRessource implements UserRepository {
-  constructor(private readonly firebaseClient: FirebaseClient) {}
+  constructor(private readonly firebaseClient: FirebaseClient) {
+  }
 
   async getAllVisitors(): Promise<User[]> {
     const apiOwners = await this.firebaseClient.getDataByCondition<
@@ -44,6 +45,7 @@ export class UserRessource implements UserRepository {
     });
     return apiOwners.map(ApiUser.toDomain);
   }
+
   async getUserByUUID(userUUId: string): Promise<User> {
     const user = await this.firebaseClient.getDataByCondition<UserFetched[]>({
       collection: "Users",
@@ -52,7 +54,7 @@ export class UserRessource implements UserRepository {
       value: userUUId,
     });
     return ApiUser.toDomain(user[0]);
-  }addAdditionnalInfosUseCase
+  }
 
   async getUser(userId: string): Promise<User> {
     const user = await this.firebaseClient.getDocumentByName<UserFetched>({
@@ -110,7 +112,7 @@ export class UserRessource implements UserRepository {
 
     if (!userCreatedId) return;
 
-    const user = { ...userFom, id: userCreatedId };
+    const user = {...userFom, id: userCreatedId};
     // localStorage.setItem("user", JSON.stringify(user));
     // localStorage.setItem("userConnect", userCreatedId);
     return ApiUser.toDomain(user);
@@ -124,16 +126,21 @@ export class UserRessource implements UserRepository {
     });
   }
 
-  async addAdditionnalInfos(
+  async addAdditionalInfos(
     userId: string,
-    form: AddAdditionnalInfos
+    form: AddAdditionalInfos
   ): Promise<void> {
-    const imageLink = await this.firebaseClient.saveImage(form.idCardPicture);
+    const profilePictureLink = await this.firebaseClient.saveImage(form.picture);
+    const idCardImageLink = await this.firebaseClient.saveImage(form.idCardPicture);
 
     await this.firebaseClient.updateDocument({
       collection: "Users",
       documentName: userId,
-      form: ApiUser.fromDomainToProperties({ ...form, idCardPicture: imageLink }),
+      form: ApiUser.fromDomainToProperties({
+        ...form,
+        idCardPicture: idCardImageLink,
+        picture: profilePictureLink
+      }),
     });
   }
 

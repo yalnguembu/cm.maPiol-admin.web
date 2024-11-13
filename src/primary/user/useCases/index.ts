@@ -8,4 +8,4 @@ export { GetUserUseCase } from "./GetUserUseCase";
 export { LoginUseCase } from "./LoginUseCase";
 export { GetCurrentUserSessionUseCase } from "./GetCurrentUserSessionUseCase";
 export { GetUserByUUIDUseCase } from "./GetUserByUUIDUseCase";
-export { AddAdditionnalInfosUseCase } from "./AddAdditionnalInfoUseCase";
+export { AdditionalInfosUseCase } from "./AdditionalInfosUseCase";

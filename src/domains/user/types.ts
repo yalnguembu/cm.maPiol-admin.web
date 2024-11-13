@@ -16,8 +16,10 @@ export type UserProperties = {
   idCardPicture?: string;
   idCardExpirationDate?: string;
   password?: string;
+  certificate?: string;
+  buildPermit?: string;
 };
 
 export type UserToSave = Omit<UserProperties, "id" | "uid" | "userType" | "status">;
 
-export type AddAdditionnalInfos = Pick<UserProperties, "idCardNumber" | "phoneNumber" | "idCardPicture" | "idCardExpirationDate">;
+export type AddAdditionalInfos = Pick<UserProperties, "idCardNumber" | "phoneNumber" | "idCardPicture" | "idCardExpirationDate"  | "picture" | "address">;

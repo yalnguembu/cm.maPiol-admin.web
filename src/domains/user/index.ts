@@ -1,4 +1,4 @@
-import { UserId, UserProperties, UserType } from "./types";
+import {UserId, UserProperties, UserType} from "./types";
 
 export class User {
   private constructor(
@@ -14,8 +14,11 @@ export class User {
     private readonly uid: string,
     private readonly status: number,
     private readonly idCardPicture: string,
-    private readonly idCardExpirationDate: string
-  ) {}
+    private readonly idCardExpirationDate: string,
+    private readonly certificate: string,
+    private readonly buildPermit: string,
+  ) {
+  }
 
   static fromProperties(properties: UserProperties) {
     const {
@@ -32,6 +35,8 @@ export class User {
       status = 0,
       idCardPicture = "",
       idCardExpirationDate = "",
+      certificate,
+      buildPermit,
     } = properties;
 
     return new User(
@@ -47,7 +52,9 @@ export class User {
       uid,
       status,
       idCardPicture,
-      idCardExpirationDate
+      idCardExpirationDate,
+      certificate,
+      buildPermit
     );
   }
 
@@ -66,6 +73,8 @@ export class User {
       status: this.status,
       idCardPicture: this.idCardPicture,
       idCardExpirationDate: this.idCardExpirationDate,
+      certificate: this.certificate,
+      buildPermit: this.buildPermit,
     };
   }
 }

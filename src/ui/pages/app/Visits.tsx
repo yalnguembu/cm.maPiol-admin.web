@@ -4,16 +4,17 @@ import {Link, useNavigate} from "react-router-dom";
 import Loading from "@/ui/components/Loading";
 import Tooltip from "@/ui/components/ui/Tooltip";
 import {useSelector} from "react-redux";
-import {VisitView} from "@/primary/visit/VisitView";
+import {NotificationView} from "@/primary/notification/NotificationView";
 import type {UserView} from "@/primary/user/UserView";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {PropertyType} from "@/domains/PropertyType";
 import Button from "@/ui/components/ui/Button";
+import {VisitView} from "@/primary/visit/VisitView";
+import {VisitStatus} from "@/domains/visit/VisitDate";
 
 const VisitGridList = () => {
-  // @ts-expect-error is known
   const {visitServices, userServices, propertyServices} =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const {isAdmin, isTenant} = useSelector((state) => state.auth);
   const [visits, setVisits] = useState([]);
@@ -196,11 +197,14 @@ const VisitGridList = () => {
                   : ""
           }`}
         >
+
           {statusTexts[visit.status]}
         </div>
+        <div className=" mt-2">
+
         {
           visit?.dates?.map((dateItem, index) =>
-            <div key={index} className="flex justify-between items-center">
+            <div key={index} className="flex justify-between items-center py-1">
               <div className="flex items-center space-x-4 text-gray-500 font-medium">
                 <div className="flex items-center space-x-1">
                   <Icon icon="heroicons-outline:calendar" width="18"/>
@@ -208,10 +212,10 @@ const VisitGridList = () => {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Icon icon="heroicons-outline:clock" width="18"/>
-                  <span>{dateItem?.hour}</span>
+                  <span>{dateItem?.hour?.substring(0, 5)}</span>
                 </div>
               </div>
-              {dateItem.status === 0 ? (
+              {dateItem.status === "PENDING" ? (
                 <div className="flex gap-x-2">
                   <Button
                     icon="heroicons-outline:x-mark"
@@ -224,21 +228,18 @@ const VisitGridList = () => {
                     className="hover:btn-primary btn text-gray-500 rounded-full px-1 py-1 w-min"
                   />
                 </div>
-              ) : <div
-                className={`rounded-full px-3 my-1 py-1 w-fit text-nowrap text-sm font-semibold ${
-                  visit.status == 0
-                    ? "text-orange-500 bg-orange-200"
-                    : visit.status == 1
-                      ? "text-red-600 bg-red-200"
-                      : visit.status == 2
-                        ? "text-green-600 bg-green-200"
-                        : ""
-                }`}
-              >{dateItem.status}</div>
+              ) : dateItem.status !== 0 &&
+                <div className={`rounded-full px-3 my-1 py-1 w-fit text-nowrap text-sm font-semibold ${
+                  visit.status == 1
+                    ? "text-red-600 bg-red-200"
+                    : visit.status == 2
+                    && "text-green-600 bg-green-200"}`}
+                >{dateItem.status}</div>
               }
             </div>
           )
         }
+        </div>
 
         {!isTenant && <Profile tenantId={visit.tenantId}/>}
         <div>
@@ -253,7 +254,7 @@ const VisitGridList = () => {
 
   const fetchMyVisits = async () => {
     setIsLoading(true);
-    const response = await visitServices.getMines(userId);
+    const response = await visitServices.getMines(userId, isTenant ? "tenant" : "owner");
     setVisits(response);
     setIsLoading(false);
   };

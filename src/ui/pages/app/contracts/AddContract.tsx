@@ -9,12 +9,12 @@ import Select from "@/ui/components/ui/Select";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import Icon from "@/ui/components/ui/Icon";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import { UserView } from "@/primary/user/UserView";
 
 const AddContract = () => {
   const { contractServices, userServices, propertyServices } =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -269,7 +269,7 @@ const AddContract = () => {
                   label="Frequence"
                   value={frequency}
                   onChange={(e) => setFrequence(e.target.value)}
-                  placeholder="Selectionnez la frequence"
+                  placeholder="Selectionnez la frequency"
                   error={errors.frequency}
                   register={register}
                   options={frequencies}

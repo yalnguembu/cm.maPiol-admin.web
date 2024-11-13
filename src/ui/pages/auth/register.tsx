@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import RegisterForm from "./common/reg-from";
 import Logo from "@/ui/assets/images/logo/logo.png";
-import AdditionnalInfos from "./common/AdditionnalInfo";
+import AdditionalInfos from "./common/AdditionalInfos";
 
 const Register = () => {
-  const [shouldDisplayAdditionnal, setShouldDisplayAdditionnal] =
+  const [shouldDisplayAdditional, setShouldDisplayAdditional] =
     useState(false);
   const [userId, setUserId] = useState("vzBbyiUrVoqZNzT1Or4p");
 
@@ -18,7 +18,7 @@ const Register = () => {
           </div>
         </div>
         <div className="right-column relative bg-white dark:bg-slate-800">
-          {!shouldDisplayAdditionnal ? (
+          {!shouldDisplayAdditional ? (
             <div className="inner-content h-full flex flex-col bg-white dark:bg-slate-800">
               <div className="auth-box h-full flex flex-col justify-center">
                 <div className="mobile-logo text-center mb-6 lg:hidden block">
@@ -34,7 +34,7 @@ const Register = () => {
                 </div>
                 <RegisterForm
                   next={(id) => {
-                    setShouldDisplayAdditionnal(true);
+                    setShouldDisplayAdditional(true);
                     setUserId(id);
                   }}
                 />
@@ -51,7 +51,7 @@ const Register = () => {
               </div>
             </div>
           ) : (
-            <AdditionnalInfos userId={userId} />
+            <AdditionalInfos userId={userId} />
           )}
         </div>
       </div>

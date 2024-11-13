@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "@/ui/components/ui/Button";
 import { toast } from "react-toastify";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import { DependenciesContext } from "@/utils/useDependencies";
 
 const schema = yup
   .object({
@@ -24,7 +24,7 @@ type RegisterFormProps = {
   next: (id: string) => void;
 };
 const RegisterForm = ({ next }: RegisterFormProps) => {
-  const { userServices } = useContext(DependeciesContext);
+  const { userServices } = useContext(DependenciesContext);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setemail] = useState("");
   const [lastname, setNom] = useState("");

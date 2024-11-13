@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import { DependenciesContext } from "@/utils/useDependencies";
 
 type Props = {
   onCreated: () => Promise<void>;
@@ -19,7 +19,7 @@ type Props = {
 const AddVisitModal = (props: Props) => {
   const { onCreated, isActive, onClose, ownerId, propertyId, tenantId } = props;
   const { visitServices } =
-    useContext(DependeciesContext);
+    useContext(DependenciesContext);
 
   const [time, setStartDate] = useState<string>("");
   const [date, setEndDate] = useState<string>("");

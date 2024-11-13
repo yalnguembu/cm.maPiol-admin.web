@@ -29,14 +29,14 @@ const ContractDetails = lazy(
   () => import("./ui/pages/app/contracts/ContractDetails")
 );
 const UserProfile = lazy(() => import("./ui/pages/app/Profile"));
-const AdminDashbord = lazy(() => import("./ui/pages/app/Dashboard"));
+const AdminDashboard = lazy(() => import("./ui/pages/app/Dashboard"));
 const UsersList = lazy(() => import("./ui/pages/app/Users"));
 const VisitsList = lazy(() => import("./ui/pages/app/Visits"));
-const AdditionnalInfo = lazy(
-  () => import("./ui/pages/auth/common/AdditionnalInfo")
+const AdditionalInfo = lazy(
+  () => import("./ui/pages/auth/common/AdditionalInfos")
 );
 
-// middelwares
+// middlewares
 const TenantMiddleWare = lazy(
   () => import("./ui/components/middlewares/tenant")
 );
@@ -61,7 +61,7 @@ function App() {
               <Route path=":id/edit" element={<EditProperty/>}/>
             </Route>
             <Route path="contracts">
-              <Route path="pending" element={<ContractListPage/>}/>
+              <Route path="pending" element={<ContractListPage status={ContractStatusFilter.PENDING}/>}/>
               <Route path="add" element={<AddContract/>}/>
               <Route path=":id" element={<ContractDetails/>}/>
             </Route>
@@ -73,12 +73,12 @@ function App() {
               <Route path=":id" element={<PropertyDetails/>}/>
             </Route>
             <Route path="contracts">
-              <Route path="pending" element={<ContractListPage/>}/>
+              <Route path="pending" element={<ContractListPage status={ContractStatusFilter.PENDING}/>}/>
             </Route>
             <Route path="calendars" element={<VisitsList/>}/>
           </Route>
           <Route path="admin" element={<AdminMiddleWare/>}>
-            <Route path="dashbord" element={<AdminDashbord/>}/>
+            <Route path="dashbord" element={<AdminDashboard/>}/>
             <Route path="calendars" element={<VisitsList/>}/>
             <Route path="properties">
               <Route index element={<PropertyListPage/>}/>
@@ -105,14 +105,14 @@ function App() {
             <Route path=":id" element={<PropertyDetails/>}/>
           </Route>
           <Route path="contracts">
-            <Route path="pending" element={<ContractListPage/>}/>
+            <Route path="pending" element={<ContractListPage status={ContractStatusFilter.PENDING}/>}/>
             <Route path=":id" element={<ContractDetails/>}/>
           </Route>
           <Route path="calendars" element={<VisitsList/>}/>
           <Route path="profile" element={<UserProfile/>}/>
           <Route
             path="additionnal-informations"
-            element={<AdditionnalInfo userId=""/>}
+            element={<AdditionalInfo userId=""/>}
           />
         </Route>
         <Route

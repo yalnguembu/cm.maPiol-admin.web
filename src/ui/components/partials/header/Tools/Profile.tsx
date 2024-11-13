@@ -18,7 +18,8 @@ const Profile = () => {
   const handleLogout = () => {
     dispatch(logOut());
     localStorage.clear();
-    navigate("/auth/login");
+    location.href= "/auth/login"
+    // navigate("/auth/login");
   };
 
   const ProfileMenu = [

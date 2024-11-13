@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import WigetBg from "@/ui/assets/images/all-img/widget-bg-1.png";
 import { UserView } from "@/primary/UserView";
-import { useDepedencies } from "@/utils/useDepedencies";
+import {ServicesContext, useDependencies} from "@/utils/useDependencies";
 import { State } from "@/ui/store/rootReducer";
 import React from "@/react";
 import Loading from "@/ui/components/Loading";
@@ -29,7 +29,7 @@ const schema = yup
 const Profile = () => {
   const { user: profile } = useSelector((state: State) => state.auth);
 
-  const { userServices } = useDepedencies();
+  const { userServices } = useDependencies<ServicesContext>();
   const [user, setUser] = useState<UserView | null>(null);
   const [shouldEdit, setShouldEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

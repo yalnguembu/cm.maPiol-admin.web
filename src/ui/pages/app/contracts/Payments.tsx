@@ -7,7 +7,7 @@ import Textinput from "@/ui/components/ui/Textinput";
 import React, {useState, useContext, useEffect} from "react";
 import Button from "@/ui/components/ui/Button";
 import Modal from "@/ui/components/ui/Modal";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {Payment} from "@/domains/contract/Payment";
 import Loading from "@/ui/components/Loading";
 import {dateToString} from "@/utils/date.js";
@@ -19,7 +19,7 @@ const Payments = ({onClose, isActive, contractId}) => {
     year: yup.string().required("Ce champs est requis"),
   });
 
-  const {contractServices} = useContext(DependeciesContext);
+  const {contractServices} = useContext<ServicesContext>(DependenciesContext);
   const [shouldDisplayForm, setShouldDisplayForm] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);

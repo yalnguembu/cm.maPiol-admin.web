@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {useRef, useEffect, useState, useMemo} from "react";
 import SidebarLogo from "./Logo";
 import Navmenu from "./Navmenu";
 import {
@@ -11,7 +11,7 @@ import SimpleBar from "simplebar-react";
 import useSidebar from "@/ui/hooks/useSidebar";
 import useSemiDark from "@/ui/hooks/useSemiDark";
 import useSkin from "@/ui/hooks/useSkin";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 const Sidebar = () => {
   const scrollableNodeRef = useRef();
@@ -27,13 +27,27 @@ const Sidebar = () => {
     isTenant,
   } = useSelector((state) => state.auth);
 
-  const menuItems = isAdmin
-    ? adminMenus
-    : isOwner
-    ? ownerMenus
-    : isTenant
-    ? tenantMenus
-    : visitorMenus;
+  const menuItems = useMemo(() => isAdmin
+      ? adminMenus
+      : isOwner
+        ? ownerMenus
+        : isTenant
+          ? tenantMenus
+          : visitorMenus,
+    [profile]
+  );
+
+  useEffect(() => {
+    console.log([isAdmin, isOwner, isTenant],profile)
+  }, []);
+
+  // const menuItems = isAdmin
+  //   ? adminMenus
+  //   : isOwner
+  //     ? ownerMenus
+  //     : isTenant
+  //       ? tenantMenus
+  //       : visitorMenus;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,10 +83,10 @@ const Sidebar = () => {
         }
       ${menuHover ? "sidebar-hovered" : ""}
       ${
-        skin === "bordered"
-          ? "border-r border-slate-200 dark:border-slate-700"
-          : "shadow-base"
-      }
+          skin === "bordered"
+            ? "border-r border-slate-200 dark:border-slate-700"
+            : "shadow-base"
+        }
       `}
         onMouseEnter={() => {
           setMenuHover(true);
@@ -81,7 +95,7 @@ const Sidebar = () => {
           setMenuHover(false);
         }}
       >
-        <SidebarLogo menuHover={menuHover} user={profile} />
+        <SidebarLogo menuHover={menuHover} user={profile}/>
         <div
           className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${
             scroll ? " opacity-100" : " opacity-0"
@@ -89,9 +103,9 @@ const Sidebar = () => {
         ></div>
         <SimpleBar
           className="sidebar-menu px-4 h-[calc(100%-80px)]"
-          scrollableNodeProps={{ ref: scrollableNodeRef }}
+          scrollableNodeProps={{ref: scrollableNodeRef}}
         >
-          <Navmenu menus={menuItems} />
+          <Navmenu menus={menuItems}/>
         </SimpleBar>
       </div>
     </div>

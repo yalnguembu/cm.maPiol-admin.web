@@ -7,3 +7,4 @@ export class CancelUseCase {
     await this.visitRepository.cancel(id);
   }
 }
+

@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from "react";
 import Textinput from "@/ui/components/ui/Textinput";
+import Fileinput from "@/ui/components/ui/Fileinput";
 import Textarea from "@/ui/components/ui/Textarea";
 import Button from "@/ui/components/ui/Button";
 import Card from "@/ui/components/ui/Card";
@@ -14,7 +15,7 @@ import GoogleMapReact from "google-map-react";
 import imgMaker from "../../../assets/images/marker.png";
 import {useNavigate} from "react-router-dom";
 import InputGroup from "@/ui/components/ui/InputGroup";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const steps = [
   {
@@ -23,15 +24,19 @@ const steps = [
   },
   {
     id: 2,
-    title: "Images",
+    title: "Pieces",
   },
   {
     id: 3,
-    title: "Address",
+    title: "Images",
   },
   {
     id: 4,
-    title: "Autres",
+    title: "Address",
+  },
+  {
+    id: 5,
+    title: "Autres options",
   },
 ];
 
@@ -39,13 +44,16 @@ const basicInformations = yup.object().shape({
   usage: yup.string().required("Ce champs est requis"),
   description: yup.string().required("Ce champs est requis"),
   type: yup.string().required("Ce champs est requis"),
+  centerOfImposition: yup.string().required("Ce champs est requis"),
+  frequency: yup.string().required("Ce champs est requis"),
+  certificate: yup.string().required("Ce champs est requis"),
+});
+const roomsSchema = yup.object().shape({
   numberOfBuilding: yup.string().required("Ce champs est requis"),
   nombrePieces: yup.string().required("Ce champs est requis"),
   nombreEtage: yup.string().required("Ce champs est requis"),
   nombreEscalier: yup.string().required("Ce champs est requis"),
   surface: yup.string().required("Ce champs est requis"),
-  centerOfImposition: yup.string().required("Ce champs est requis"),
-  frequence: yup.string().required("Ce champs est requis"),
   bedroomNumber: yup.string().required("Ce champs est requis"),
   bathroomNumber: yup.string().required("Ce champs est requis"),
 });
@@ -60,9 +68,7 @@ const addressSchema = yup.object().shape({
   street: yup.string().required("Ce champs est requis"),
 });
 
-const otherSchema = yup.object().shape({
-  usage: yup.string().required("Ce champs est requis"),
-});
+const otherSchema = yup.object().shape({});
 
 const frequencies = [
   {value: "Jours", label: "Jours"},
@@ -71,25 +77,28 @@ const frequencies = [
   {value: "Annee", label: "Annee"},
 ];
 const AddProperty = () => {
-  const {propertyServices} = useContext(DependeciesContext);
+  const {propertyServices} = useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const [stepNumber, setStepNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // first step
+  // basic informations step
   const [usage, setUsage] = useState(0);
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("XAF");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [types, setTypes] = useState([]);
+  const [centerOfImposition, setCenterOfImposition] = useState("");
+  const [certificate, setCertificate] = useState("");
+
+  // rooms step
   const [numberOfBuilding, setNumberOfBulding] = useState("");
   const [nombrePieces, setNumberOfRoom] = useState("");
   const [nombreEscalier, setNumberOfStaircase] = useState("");
   const [nombreEtage, setNumberOfFloor] = useState("");
   const [surface, setSurface] = useState("");
-  const [centerOfImposition, setCenterOfImposition] = useState("");
-  const [frequence, setFrequence] = useState("");
+  const [frequency, setFrequency] = useState("");
   const [bedroomNumber, setNumberOfBedRoom] = useState("");
   const [bathroomNumber, setNumberOfBath] = useState("");
 
@@ -156,12 +165,15 @@ const AddProperty = () => {
       currentStepSchema = basicInformations;
       break;
     case 1:
-      currentStepSchema = imagesSchema;
+      currentStepSchema = roomsSchema;
       break;
     case 2:
-      currentStepSchema = addressSchema;
+      currentStepSchema = imagesSchema;
       break;
     case 3:
+      currentStepSchema = addressSchema;
+      break;
+    case 4:
       currentStepSchema = otherSchema;
       break;
     default:
@@ -215,9 +227,10 @@ const AddProperty = () => {
               street: data.street,
             },
             surface: data.surface,
+            certificate: data.certificate,
             type: data.type,
             usage: data.usage,
-            frequence,
+            frequency: frequency,
             numberOfBuilding: data.numberOfBuilding,
             nombreEscalier: data.nombreEscalier,
             nombreEtage: data.nombreEtage,
@@ -304,7 +317,7 @@ const AddProperty = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card
-          className="h-[calc(100dvh-200px)]"
+          className="lg:h-[calc(100dvh-200px)]"
           title="Ajouter une nouvelle propriete"
           headerslot={
             <div
@@ -334,7 +347,7 @@ const AddProperty = () => {
             </div>
           }
         >
-          <div className="grid gap-5 grid-cols-12 divide-x">
+          <div className="grid gap-5 grid-cols-12 divide-y pt-4 lg:divide-y-0 lg:divide-x">
             <div className="lg:col-span-3 col-span-12">
               <div className="flex z-[5] items-start relative flex-col lg:min-h-full md:min-h-[300px] min-h-[250px]">
                 {steps.map((item, i) => (
@@ -378,63 +391,61 @@ const AddProperty = () => {
               </div>
             </div>
 
-            <div className="conten-box lg:col-span-9 col-span-12 h-[calc(100dvh-350px)] overflow-y-auto pl-8">
+            <div className="conten-box lg:col-span-9 col-span-12 lg:h-[calc(100dvh-350px)] overflow-y-auto pt-8 lg:pt-0 lg:pl-8">
               {stepNumber === 0 && (
                 <div>
-                  <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-y-3 gap-x-5">
-                    <div className="grid grid-cols-2 col-span-3 gap-y-3 gap-x-5">
-                      <Select
-                        label="Usage"
-                        value={usage}
-                        onChange={(e) => setUsage(e.target.value)}
-                        placeholder="Selectionnez l'usage"
-                        error={errors.usage}
-                        register={register}
-                        options={usages}
-                        name="usage"
-                      />
-                      <Select
-                        label="Type"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                        placeholder="Selectionnez le type"
-                        error={errors.type}
-                        register={register}
-                        options={types}
-                        name="type"
-                      />
-                      <InputGroup
-                        type="text"
-                        label="Montant"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        name="amount"
-                        prepend={
-                          <Select
-                            className="border-none w-24 active:border-none focus:outline-none"
-                            onChange={(e) => setCurrency(e.target.value)}
-                            value={currency}
-                            placeholder="Devise"
-                            register={register}
-                            options={currencies}
-                            name="devise"
-                          />
-                        }
-                        error={errors.amount}
-                        placeholder="Entrez le montant"
-                        register={register}
-                      />
-                      <Select
-                        label="Frequence"
-                        onChange={(e) => setFrequence(e.target.value)}
-                        placeholder="Selectionnez la frequence"
-                        error={errors.frequence}
-                        register={register}
-                        options={frequencies}
-                        name="frequence"
-                      />
-                    </div>
-                    <div className="col-span-3">
+                  <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-y-3 gap-x-5">
+                    <Select
+                      label="Usage"
+                      value={usage}
+                      onChange={(e) => setUsage(e.target.value)}
+                      placeholder="Selectionnez l'usage"
+                      error={errors.usage}
+                      register={register}
+                      options={usages}
+                      name="usage"
+                    />
+                    <Select
+                      label="Type"
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      placeholder="Selectionnez le type"
+                      error={errors.type}
+                      register={register}
+                      options={types}
+                      name="type"
+                    />
+                    <InputGroup
+                      type="text"
+                      label="Montant"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      name="amount"
+                      prepend={
+                        <Select
+                          className="border-none w-24 active:border-none focus:outline-none"
+                          onChange={(e) => setCurrency(e.target.value)}
+                          value={currency}
+                          placeholder="Devise"
+                          register={register}
+                          options={currencies}
+                          name="devise"
+                        />
+                      }
+                      error={errors.amount}
+                      placeholder="Entrez le montant"
+                      register={register}
+                    />
+                    <Select
+                      label="Frequence"
+                      onChange={(e) => setFrequency(e.target.value)}
+                      placeholder="Selectionnez la frequency"
+                      error={errors.frequency}
+                      register={register}
+                      options={frequencies}
+                      name="frequency"
+                    />
+                    <div className="col-span-2">
                       <Textarea
                         label="Description"
                         dvalue={description}
@@ -446,79 +457,6 @@ const AddProperty = () => {
                       />
                     </div>
                     <Textinput
-                      label="Nombre de batiment"
-                      value={numberOfBuilding}
-                      onChange={(e) => setNumberOfBulding(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre de batiment"
-                      name="numberOfBuilding"
-                      error={errors.numberOfBuilding}
-                      register={register}
-                    />
-                    <Textinput
-                      label="Nombre d'etage"
-                      value={nombreEtage}
-                      onChange={(e) => setNumberOfFloor(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre d'etage"
-                      name="nombreEtage"
-                      error={errors.nombreEtage}
-                      register={register}
-                    />
-                    <Textinput
-                      label="Nombre de pieces"
-                      value={nombrePieces}
-                      onChange={(e) => setNumberOfRoom(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre de pieces"
-                      name="nombrePieces"
-                      error={errors.nombrePieces}
-                      register={register}
-                    />
-                    <Textinput
-                      label="Nombre d'escalier"
-                      value={nombreEscalier}
-                      onChange={(e) => setNumberOfStaircase(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre d'escalier"
-                      name="nombreEscalier"
-                      error={errors.nombreEscalier}
-                      register={register}
-                    />
-                    <Textinput
-                      label="Surface"
-                      value={surface}
-                      onChange={(e) => setSurface(e.target.value)}
-                      type="number"
-                      placeholder="Entrer la surface"
-                      name="surface"
-                      error={errors.surface}
-                      hasicon
-                      register={register}
-                    />
-                    <Textinput
-                      label="Nombre de douche"
-                      value={bathroomNumber}
-                      onChange={(e) => setNumberOfBath(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre de douche"
-                      name="bathroomNumber"
-                      error={errors.bathroomNumber}
-                      hasicon
-                      register={register}
-                    />
-                    <Textinput
-                      label="Nombre de chambre"
-                      value={bedroomNumber}
-                      onChange={(e) => setNumberOfBedRoom(e.target.value)}
-                      type="number"
-                      placeholder="Entrer le nombre de chambre"
-                      name="bedroomNumber"
-                      error={errors.bedroomNumber}
-                      hasicon
-                      register={register}
-                    />
-                    <Textinput
                       label="Centre d'imposition"
                       value={centerOfImposition}
                       onChange={(e) => setCenterOfImposition(e.target.value)}
@@ -528,11 +466,98 @@ const AddProperty = () => {
                       error={errors.centerOfImposition}
                       register={register}
                       hasicon
+                      className="h-14"
                     />
+                    <Fileinput
+                      label="Certificat de propriete"
+                      value={certificate}
+                      onChange={(e) => setCertificate(e.target?.files[0])}
+                      type="text"
+                      placeholder="Selectionner le document"
+                      name="certificate"
+                      error={errors.certificate}
+                      register={register}
+                      hasicon/>
                   </div>
                 </div>
-              )}
-              {stepNumber === 1 && (
+              )}{
+              stepNumber === 1 &&
+              <div>
+                <Textinput
+                  label="Nombre de batiment"
+                  value={numberOfBuilding}
+                  onChange={(e) => setNumberOfBulding(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre de batiment"
+                  name="numberOfBuilding"
+                  error={errors.numberOfBuilding}
+                  register={register}
+                />
+                <Textinput
+                  label="Nombre d'etage"
+                  value={nombreEtage}
+                  onChange={(e) => setNumberOfFloor(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre d'etage"
+                  name="nombreEtage"
+                  error={errors.nombreEtage}
+                  register={register}
+                />
+                <Textinput
+                  label="Nombre de pieces"
+                  value={nombrePieces}
+                  onChange={(e) => setNumberOfRoom(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre de pieces"
+                  name="nombrePieces"
+                  error={errors.nombrePieces}
+                  register={register}
+                />
+                <Textinput
+                  label="Nombre d'escalier"
+                  value={nombreEscalier}
+                  onChange={(e) => setNumberOfStaircase(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre d'escalier"
+                  name="nombreEscalier"
+                  error={errors.nombreEscalier}
+                  register={register}
+                />
+                <Textinput
+                  label="Surface"
+                  value={surface}
+                  onChange={(e) => setSurface(e.target.value)}
+                  type="number"
+                  placeholder="Entrer la surface"
+                  name="surface"
+                  error={errors.surface}
+                  hasicon
+                  register={register}
+                />
+                <Textinput
+                  label="Nombre de douche"
+                  value={bathroomNumber}
+                  onChange={(e) => setNumberOfBath(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre de douche"
+                  name="bathroomNumber"
+                  error={errors.bathroomNumber}
+                  hasicon
+                  register={register}
+                />
+                <Textinput
+                  label="Nombre de chambre"
+                  value={bedroomNumber}
+                  onChange={(e) => setNumberOfBedRoom(e.target.value)}
+                  type="number"
+                  placeholder="Entrer le nombre de chambre"
+                  name="bedroomNumber"
+                  error={errors.bedroomNumber}
+                  hasicon
+                  register={register}
+                />
+              </div>}
+              {stepNumber === 2 && (
                 <div>
                   <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
                     <div className="lg:col-span-3 md:col-span-2 col-span-1">
@@ -546,7 +571,7 @@ const AddProperty = () => {
                   </div>
                 </div>
               )}
-              {stepNumber === 2 && (
+              {stepNumber === 3 && (
                 <div>
                   <div className="grid grid-cols-1 md:grid-cols-1 gap-5 pl-6">
                     <div className="">
@@ -610,7 +635,7 @@ const AddProperty = () => {
                   </div>
                 </div>
               )}
-              {stepNumber === 3 && (
+              {stepNumber === 4 && (
                 <div className="pl-6">
                   <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-5 gap-y-10">
                     <div className="lg:col-span-3 md:col-span-2 col-span-1">

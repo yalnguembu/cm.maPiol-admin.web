@@ -7,13 +7,13 @@ import { SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 import { PropertyView } from "@/primary/property/PropertyView";
 import { State } from "@/ ui/store/rootReducer";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const PropertyGridList = () => {
   const navigate = useNavigate();
   const { isOwner } = useSelector((state: State) => state.auth);
   const { propertyServices } =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
 
   const [properties, setProperties] = useState<PropertyView[]>([]);
   const [isLoading, setIsLoading] = useState(false);

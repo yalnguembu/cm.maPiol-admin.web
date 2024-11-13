@@ -6,7 +6,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {toast} from "react-toastify";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext} from "@/utils/useDependencies";
 
 type Props = {
   onConfirm: () => Promise<void>;

@@ -1,5 +1,5 @@
-import { User } from "@/domains/user";
-import { UserId, UserType } from "@/domains/user/types";
+import {User} from "@/domains/user";
+import {UserId, UserType} from "@/domains/user/types";
 
 export class UserView {
   private constructor(
@@ -14,8 +14,11 @@ export class UserView {
     readonly userType: UserType,
     readonly status: number,
     readonly idCardPicture: string,
-    readonly idCardExpirationDate: string
-  ) {}
+    readonly idCardExpirationDate: string,
+    readonly certificate: string,
+    readonly buildPermit: string
+  ) {
+  }
 
   static fromDomain(properties: User) {
     const {
@@ -30,7 +33,9 @@ export class UserView {
       userType,
       status,
       idCardPicture,
-      idCardExpirationDate
+      idCardExpirationDate,
+      certificate,
+      buildPermit
     } = properties.properties;
 
     return new UserView(
@@ -45,7 +50,9 @@ export class UserView {
       userType,
       status,
       idCardPicture,
-      idCardExpirationDate
+      idCardExpirationDate,
+      certificate,
+      buildPermit
     );
   }
 

@@ -1,4 +1,4 @@
-import { UserRepository } from "../../../domains/user/repository/UserRepository";
+import { UserRepository } from "@/domains/notification/repository/NotificationRepository";
 import { UserView } from "../UserView";
 
 export class GetCurrentUserSessionUseCase {

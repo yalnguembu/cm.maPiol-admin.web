@@ -6,7 +6,7 @@ import Tooltip from "@/ui/components/ui/Tooltip";
 import {useSelector} from "react-redux";
 import {ContractView} from "@/primary/contract/ContractView";
 import type {UserView} from "@/primary/user/UserView";
-import {DependeciesContext} from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {PropertyType} from "@/domains/PropertyType";
 import {dateToString} from "@/utils/date";
 import {ContractStatusFilter} from "@/domains/contract/enum";
@@ -16,7 +16,7 @@ type ContractProperties = {
 }
 const ContractGridList = ({status}: ContractProperties) => {
   const {contractServices, userServices, propertyServices} =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const {isAdmin, isTenant, isOwner} = useSelector((state) => state.auth);
   const [contracts, setProperties] = useState([]);

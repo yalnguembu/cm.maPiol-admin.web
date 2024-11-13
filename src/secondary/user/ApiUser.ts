@@ -1,5 +1,5 @@
-import { User } from "@/domains/user";
-import { UserType } from "@/domains/user/types";
+import {User} from "@/domains/user";
+import {UserType} from "@/domains/user/types";
 
 export type UserFetched = {
   addresse: string;
@@ -16,6 +16,8 @@ export type UserFetched = {
   statut: number;
   CNIDateDelivrer: string;
   photoCNI: string;
+  certificatPropriete: string;
+  permitBatir: string;
 };
 
 export class ApiUser {
@@ -34,6 +36,8 @@ export class ApiUser {
       status: apiUser.statut ?? 0,
       idCardPicture: apiUser.photoCNI ?? "",
       idCardExpirationDate: apiUser.CNIDateDelivrer ?? "",
+      certificate: apiUser.certificatPropriete,
+      buildPermit: apiUser.permitBatir,
     });
   }
 
@@ -52,6 +56,8 @@ export class ApiUser {
       statut: apiUser.status ?? 0,
       photoCNI: apiUser.idCardPicture,
       CNIDateDelivrer: apiUser.idCardExpirationDate,
+      certificatPropriete: apiUser.certificate,
+      permitBatir: apiUser.buildPermit,
     };
 
     const filtered = Object.entries(user)

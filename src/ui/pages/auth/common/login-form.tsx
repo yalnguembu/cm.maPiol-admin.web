@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { homePages } from "@/utils/menus";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/ui/store/api/auth/authSlice";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const schema = yup
   .object({
@@ -20,12 +20,12 @@ const schema = yup
   .required();
 
 const LoginForm = () => {
-  const { userServices } = useContext(DependeciesContext);
+  const { userServices } = useContext<ServicesContext>(DependenciesContext);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const {
     register,
@@ -76,7 +76,7 @@ const LoginForm = () => {
         register={register}
         error={errors.email}
         value={email}
-        onChange={(e) => setemail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         className="h-[48px]"
         placeholder="Entrer votre addresse email"
       />
@@ -85,7 +85,7 @@ const LoginForm = () => {
         label="mots de passe"
         type="password"
         value={password}
-        onChange={(e) => setpassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         register={register}
         error={errors.password}
         className="h-[48px]"

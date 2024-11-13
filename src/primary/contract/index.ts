@@ -6,7 +6,7 @@ import {
   GetMinesUseCase,
   UpdateContractUseCase, SignContractUseCase, GetPaymentsUseCase, CreatePaymentUseCase,
 } from "./useCases";
-import {ContractId, ContractToSave} from "domains/contract/types";
+import {ContractId, ContractToSave} from "domains/notification/types";
 import {Payment} from "@/domains/contract/Payment";
 import {ContractStatusFilter} from "@/domains/contract/enum";
 

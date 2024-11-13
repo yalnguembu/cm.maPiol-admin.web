@@ -13,13 +13,13 @@ import Fileinput from "@/ui/components/ui/Fileinput";
 import { PropertyView } from "@/primary/property/PropertyView";
 import AddVisitModal from "@/ui/components/AddVisitModal";
 import { useSelector } from "react-redux";
-import { DependeciesContext } from "@/utils/useDepedencies";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const PropertyDetails = () => {
   const navigate = useNavigate();
   const { isTenant } = useSelector((state) => state.auth);
   const { propertyServices } =
-    useContext(DependeciesContext);
+    useContext<ServicesContext>(DependenciesContext);
 
   const [property, setProperty] = useState<PropertyView>({});
   const [isLoading, setIsLoading] = useState(false);

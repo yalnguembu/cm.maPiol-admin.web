@@ -1,4 +1,4 @@
-import {ContractRepository} from "domains/contract/repository/ContractRepository";
+import {ContractRepository} from "domains/notification/repository/ContractRepository";
 import {ContractView} from "../ContractView";
 import {ContractStatusFilter} from "@/domains/contract/enum";
 

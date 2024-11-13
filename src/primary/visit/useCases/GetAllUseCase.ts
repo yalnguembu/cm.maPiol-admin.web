@@ -1,5 +1,5 @@
 import { VisitRepository } from "@/domains/visit/repository/VisitRepository";
-import { VisitView } from "../VisitView";
+import { VisitView } from "../../visit/VisitView";
 
 export class GetAllUseCase {
   constructor(private readonly visitRepository: VisitRepository) {}

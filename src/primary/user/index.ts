@@ -10,9 +10,9 @@ import {
   GetVisitorsUseCase,
   GetCurrentUserSessionUseCase,
   GetUserByUUIDUseCase,
-  AddAdditionnalInfosUseCase,
+  AdditionalInfosUseCase,
 } from "./useCases";
-import { AddAdditionnalInfos, UserId, UserToSave } from "domains/user/types";
+import { AddAdditionalInfos, UserId, UserToSave } from "domains/user/types";
 
 export class UserService {
   private getUsersUseCase: GetUserUseCase;
@@ -25,7 +25,7 @@ export class UserService {
   private getTenantsUseCase: GetTenantsUseCase;
   private getCurrentUserSessionUseCase: GetCurrentUserSessionUseCase;
   private loginUseCase: LoginUseCase;
-  private addAdditionnalInfosUseCase: AddAdditionnalInfosUseCase;
+  private addAdditionalInfosUseCase: AdditionalInfosUseCase;
 
   constructor(userRepository: UserRepository) {
     this.getUsersUseCase = new GetUserUseCase(userRepository);
@@ -40,7 +40,7 @@ export class UserService {
       userRepository
     );
     this.loginUseCase = new LoginUseCase(userRepository);
-    this.addAdditionnalInfosUseCase = new AddAdditionnalInfosUseCase(
+    this.addAdditionalInfosUseCase = new AdditionalInfosUseCase(
       userRepository
     );
   }
@@ -73,8 +73,8 @@ export class UserService {
     return await this.createOwnerUseCase.execute(user);
   }
 
-  async addAdditionnalInfos(id: string, user: AddAdditionnalInfos) {
-    return await this.addAdditionnalInfosUseCase.execute(id, user);
+  async addAdditionalInfos(id: string, user: AddAdditionalInfos) {
+    return await this.addAdditionalInfosUseCase.execute(id, user);
   }
 
   async updateUser(userId: UserId, form: UserToSave) {

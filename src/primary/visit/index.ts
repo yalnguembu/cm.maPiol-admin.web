@@ -8,7 +8,7 @@ import {
   CreateUseCase
 } from "./useCases";
 import {VisitId} from "@/domains/visit/types";
-import {VisitToSave} from "domains/visit/types";
+import {VisitToSave} from "@/domains/visit/types";
 
 export class VisitService {
   private getByIdUseCase: GetByIdUseCase;

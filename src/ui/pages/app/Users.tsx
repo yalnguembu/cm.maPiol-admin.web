@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Loading from "@/ui/components/Loading";
 import Card from "@/ui/components/ui/Card";
 import Button from "@/ui/components/ui/Button";
-import { useDepedencies } from "@/utils/useDepedencies";
+import {ServicesContext, useDependencies} from "@/utils/useDependencies";
 import { UserView } from "@/primary/UserView";
 import { useSelector } from "react-redux";
 import { State } from "@/ui/store/rootReducer";
@@ -39,7 +39,7 @@ type UserListProps = {
 };
 
 const UsersList = ({ userType }: UserListProps) => {
-  const { userServices } = useDepedencies();
+  const { userServices } = useDependencies<ServicesContext>();
 
   const { isAdmin } = useSelector((state: State) => state.auth);
 
