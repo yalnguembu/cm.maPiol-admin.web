@@ -49,7 +49,8 @@ const ContractGridList = ({status}: ContractProperties) => {
           children={
             <div className="flex items-center group w-min rounded-lg transition">
               <div className="w-10 h-10 rounded-full bg-gray-400">
-                <img src="" alt=""/>
+                {user?.picture ? <img src={user?.picture} alt={`${user?.fullName} picture`}/> :
+                  <Icon icon="heroicons-outline:user-circle" width="38"/>}
               </div>
               <div className="ml-2 mt-1">
                 <span
@@ -57,7 +58,7 @@ const ContractGridList = ({status}: ContractProperties) => {
                   {user?.fullName}
                 </span>
                 <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
-                  <Icon icon="heroicons-outline:at-symbol" width="14"/>
+                  <Icon icon="heroicons-outline:envelope" width="14"/>
                   <span className="ml-1">{user?.email}</span>
                 </div>
               </div>
@@ -74,17 +75,22 @@ const ContractGridList = ({status}: ContractProperties) => {
           content={
             <div className="p-4 w-60 flex flex-col justify-center items-center text-center">
               <div className="w-[5rem] h-[5rem] block bg-black-500 rounded-full border overflow-hidden">
-                <img
-                  className="w-25 h-25 block bg-black-500 rounded-full border object-center object-cover"
-                  src={user?.firstname}
-                  alt={`une photo de ${user?.fullName}`}
-                />
+                {
+                  user?.picture ?
+                    <img
+                      className="w-25 h-25 block bg-black-500 rounded-full border object-center object-cover"
+                      src={user?.picture}
+                      alt={`une photo de ${user?.fullName}`}
+                    />
+                    :
+                    <Icon icon="heroicons-outline:user-circle" width="38"/>
+                }
               </div>
               <span className="block text-xl mb-0 pb-0 font-semibold text-slate-900 mt-4">
                 {user?.fullName}
               </span>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-2">
-                <Icon icon="heroicons-outline:at-symbol" width="14"/>
+                <Icon icon="heroicons-outline:envelope" width="14"/>
                 <span className="ml-1">{user?.email}</span>
               </div>
               <span

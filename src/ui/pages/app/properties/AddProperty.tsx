@@ -391,7 +391,8 @@ const AddProperty = () => {
               </div>
             </div>
 
-            <div className="conten-box lg:col-span-9 col-span-12 lg:h-[calc(100dvh-350px)] overflow-y-auto pt-8 lg:pt-0 lg:pl-8">
+            <div
+              className="conten-box lg:col-span-9 col-span-12 lg:h-[calc(100dvh-350px)] overflow-y-auto pt-8 lg:pt-0 lg:pl-8">
               {stepNumber === 0 && (
                 <div>
                   <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-y-3 gap-x-5">
@@ -445,7 +446,7 @@ const AddProperty = () => {
                       options={frequencies}
                       name="frequency"
                     />
-                    <div className="col-span-2">
+                    <div className="">
                       <Textarea
                         label="Description"
                         dvalue={description}
@@ -455,29 +456,31 @@ const AddProperty = () => {
                         error={errors.description}
                         register={register}
                       />
+                      <Textinput
+                        label="Centre d'imposition"
+                        value={centerOfImposition}
+                        onChange={(e) => setCenterOfImposition(e.target.value)}
+                        type="text"
+                        placeholder="Entrer le Centre d'imposition"
+                        name="centerOfImposition"
+                        error={errors.centerOfImposition}
+                        register={register}
+                        hasicon
+                      />
                     </div>
-                    <Textinput
-                      label="Centre d'imposition"
-                      value={centerOfImposition}
-                      onChange={(e) => setCenterOfImposition(e.target.value)}
-                      type="text"
-                      placeholder="Entrer le Centre d'imposition"
-                      name="centerOfImposition"
-                      error={errors.centerOfImposition}
-                      register={register}
-                      hasicon
-                      className="h-14"
-                    />
                     <Fileinput
                       label="Certificat de propriete"
-                      value={certificate}
+                      selectedFile={certificate}
                       onChange={(e) => setCertificate(e.target?.files[0])}
                       type="text"
                       placeholder="Selectionner le document"
                       name="certificate"
                       error={errors.certificate}
                       register={register}
-                      hasicon/>
+                      hasicon
+                      preview
+                      className="h-36"
+                    />
                   </div>
                 </div>
               )}{

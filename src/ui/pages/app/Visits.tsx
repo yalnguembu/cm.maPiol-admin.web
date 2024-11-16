@@ -53,7 +53,7 @@ const VisitGridList = () => {
                   {user?.fullName}
                 </span>
                 <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
-                  <Icon icon="heroicons-outline:at-symbol" width="14"/>
+                  <Icon icon="heroicons-outline:envelope" width="14"/>
                   <span className="ml-1">{user?.email}</span>
                 </div>
               </div>
@@ -80,7 +80,7 @@ const VisitGridList = () => {
                 {user?.fullName}
               </span>
               <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-2">
-                <Icon icon="heroicons-outline:at-symbol" width="14"/>
+                <Icon icon="heroicons-outline:envelope" width="14"/>
                 <span className="ml-1">{user?.email}</span>
               </div>
               <span

@@ -1,41 +1,20 @@
 import Card from "@/ui/components/ui/Card";
-import Select from "@/ui/components/ui/Select";
-import {yupResolver} from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import {useForm} from "react-hook-form";
-import Textinput from "@/ui/components/ui/Textinput";
 import React, {useState, useContext, useEffect} from "react";
 import Button from "@/ui/components/ui/Button";
 import Modal from "@/ui/components/ui/Modal";
+import Icon from "@/ui/components/ui/Icon";
 import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {Payment} from "@/domains/contract/Payment";
 import Loading from "@/ui/components/Loading";
 import {dateToString} from "@/utils/date.js";
+import AddPayment from "@/ui/pages/app/contracts/AddPayment";
 
 const Payments = ({onClose, isActive, contractId}) => {
-  const schema = yup.object().shape({
-    amount: yup.string().required("Ce champs est requis"),
-    month: yup.string().required("Ce champs est requis"),
-    year: yup.string().required("Ce champs est requis"),
-  });
-
   const {contractServices} = useContext<ServicesContext>(DependenciesContext);
   const [shouldDisplayForm, setShouldDisplayForm] = useState<boolean>(false);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [amount, setAmount] = useState<number | null>(null);
-  const [month, setMonth] = useState<number>(1);
-  const [year, setYear] = useState<number>(2024);
-  const [payments, setPayments] = useState <Payment[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
 
-  const {
-    register,
-    formState: {errors},
-    handleSubmit,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: "all",
-  });
 
   const fetchPayments = async () => {
     try {
@@ -50,29 +29,10 @@ const Payments = ({onClose, isActive, contractId}) => {
     }
   };
 
-  const onSubmit = async () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    try {
-      await contractServices.addPayment(new Payment({
-        amount: {
-          currency: "XAF",
-          value: amount,
-        },
-        year,
-        month,
-        contractId,
-        initialisationDate: Date.now(),
-      }));
-      fetchPayments();
-      toggleShouldDisplayForm();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handledCreated = () => {
+    toggleShouldDisplayForm();
+    fetchPayments();
+  }
 
   useEffect(() => {
     fetchPayments();
@@ -85,7 +45,7 @@ const Payments = ({onClose, isActive, contractId}) => {
     const groupedObjects = {};
 
     payments.forEach((payment) => {
-      const key = `${payment.year}-${payment.month}`;
+      const key = `${payment.year}-${payment.period}`;
 
       if (!groupedObjects[key]) {
         groupedObjects[key] = [];
@@ -97,26 +57,7 @@ const Payments = ({onClose, isActive, contractId}) => {
     return groupedObjects;
   }
 
-  const months = [
-    {
-      value: 1,
-      label: "January",
-    },
-    {
-      value: 2,
-      label: "Febuary",
-    },
-  ];
-  const years = [
-    {
-      value: 2024,
-      label: "2024",
-    },
-    {
-      value: "2023",
-      label: 2023,
-    },
-  ];
+
   return (
     <Modal
       activeModal={isActive}
@@ -125,7 +66,7 @@ const Payments = ({onClose, isActive, contractId}) => {
       title=""
       centered
     >
-      <div className="w-full flex flex-col gap-y-4">
+      <div className="w-full flex flex-col gap-y-4 max-h-[70dvh] overflow-y-auto">
         <div className="flex justify-between border-b pb-4">
           <h5>Paiments</h5>
           {!shouldDisplayForm && (
@@ -137,50 +78,13 @@ const Payments = ({onClose, isActive, contractId}) => {
             />
           )}
         </div>
-        <div className="grid gap-4 relative">
+        <div className="grid gap-4 relative transition duration-300">
           {shouldDisplayForm && (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Card className="mb-4">
-                <Button
-                  type="submit"
-                  className="btn btn-dark py-1.5 absolute -top-16 right-1"
-                  text="Enregistrer"
-                  isLoading={isLoading}
-                />
-                <Textinput
-                  label="Nombre de batiment"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  type="number"
-                  placeholder="Entrer le montant"
-                  name="amount"
-                  error={errors.amount}
-                  register={register}
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <Select
-                    label="Mois"
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                    placeholder="Selectionnez le mois"
-                    error={errors.month}
-                    register={register}
-                    options={months}
-                    name="month"
-                  />
-                  <Select
-                    label="Annee"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                    placeholder="Selectionnez l'annee"
-                    error={errors.year}
-                    register={register}
-                    options={years}
-                    name="year"
-                  />
-                </div>
-              </Card>
-            </form>
+            <AddPayment
+              onClose={toggleShouldDisplayForm}
+              onCreated={handledCreated}
+              contractId={contractId}
+            />
           )}
           {
             isLoading ?
@@ -188,12 +92,24 @@ const Payments = ({onClose, isActive, contractId}) => {
                 <Loading/>
               </div>
               : payments.length ? payments?.map((payment, index) => (
-                  <Card key={index} title={"June - 2024"} subtitle={`${payment.amount.value} ${payment.amount.currency}`}>
-                    <div>
-                      <div className="flex">
-                        <span>Initie le: </span>
-                        <span className="ml-2 text-sm">{dateToString(payment.initialisationDate)}</span>
+                  <Card key={index}
+                        title={`${payment.paymentType}: ${payment.amount.value} ${payment.amount.currency}`}
+                        subtitle={`${payment.unit} / ${payment.period} - ${payment.paymentMethod}`}
+                        className="border rounded-lg"
+                  >
+                    <div className="flex gap-4">
+                      <div className="flex gap-2 text-sm">
+                        <span>Effectue le: </span>
+                        <span>{dateToString(payment.initialisationDate)}</span>
                       </div>
+                      <span>|</span>
+                      <div className="flex gap-2 text-sm">
+                        <span>Pour le compte de l'anne:</span>
+                        <span>{payment.year}</span>
+                      </div>
+                    </div>
+                    <div className="flex mt-2 text-sm">
+                      {payment.description}
                     </div>
                   </Card>
                 ))

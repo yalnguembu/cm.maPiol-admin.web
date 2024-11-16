@@ -29,7 +29,7 @@ export class ApiUser {
       email: apiUser.email ?? "",
       phoneNumber: apiUser.telephone ?? "",
       idCardNumber: apiUser.cniNumber ?? "",
-      picture: apiUser.photoProfil ?? "",
+      picture: (apiUser.profileImage || apiUser.photoProfil) ?? "",
       address: apiUser.addresse ?? "",
       uid: apiUser.uid ?? "",
       userType: (apiUser.typeUsersId as unknown as UserType) ?? 0,

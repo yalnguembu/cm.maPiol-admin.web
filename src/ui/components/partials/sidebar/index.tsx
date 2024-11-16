@@ -38,7 +38,7 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    console.log([isAdmin, isOwner, isTenant],profile)
+    // console.log([isAdmin, isOwner, isTenant],profile)
   }, []);
 
   // const menuItems = isAdmin

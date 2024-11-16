@@ -91,10 +91,14 @@ export class ApiContract {
 export type ApiPaymentProperties = {
   montant: string;
   devise: string;
-  mois: string;
   annee: string;
+  unite: string;
   contratId: string;
   dateInitialisation: string;
+  periode: string;
+  moyenDePaiement: string;
+  typeDePaiement: string;
+  description: string;
 }
 
 export class ApiPayment {
@@ -104,10 +108,14 @@ export class ApiPayment {
         value: payment.montant ?? 0,
         currency: payment.devise ?? "XAF",
       },
-      month: payment.mois ?? "",
+      period: payment.periode ?? "",
       year: payment.annee ?? "",
       contractId: payment.contratId ?? "",
       initialisationDate: payment.dateInitialisation ?? "",
+      description: payment.description ?? "",
+      unit: payment.unite ?? "",
+      paymentMethod: payment.moyenDePaiement ?? "",
+      paymentType: payment.typeDePaiement ?? "",
     })
   }
 
@@ -115,10 +123,14 @@ export class ApiPayment {
     return {
       montant: payment.amount.value,
       devise: payment.amount.currency,
-      mois: payment.month,
       annee: payment.year,
       contratId: payment.contractId,
       dateInitialisation: payment.initialisationDate,
+      periode: payment.period,
+      description: payment.description,
+      unite: payment.unit,
+      moyenDePaiement: payment.paymentMethod,
+      typeDePaiement: payment.paymentType,
     }
   }
 }

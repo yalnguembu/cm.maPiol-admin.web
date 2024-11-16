@@ -1,19 +1,19 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {useContext, useState, useEffect} from "react";
 import Textinput from "@/ui/components/ui/Textinput";
 import Button from "@/ui/components/ui/Button";
 import Card from "@/ui/components/ui/Card";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "@/ui/components/ui/Select";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import Icon from "@/ui/components/ui/Icon";
 import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
-import { UserView } from "@/primary/user/UserView";
+import {UserView} from "@/primary/user/UserView";
 
 const AddContract = () => {
-  const { contractServices, userServices, propertyServices } =
+  const {contractServices, userServices, propertyServices} =
     useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
 
@@ -36,24 +36,24 @@ const AddContract = () => {
   const [propertyId, setPropertyId] = useState("");
 
   const frequencies = [
-    { value: 1, label: "Jours" },
-    { value: 2, label: "Semaines" },
-    { value: 3, label: "Mois" },
-    { value: 4, label: "Annee" },
+    {value: 1, label: "Jours"},
+    {value: 2, label: "Semaines"},
+    {value: 3, label: "Mois"},
+    {value: 4, label: "Annee"},
   ];
 
   const currencies = [
-    { value: "XAF", label: "XAF" },
-    { value: "USD", label: "USD" },
+    {value: "XAF", label: "XAF"},
+    {value: "USD", label: "USD"},
   ];
-  // useQue
+
   const [properties, setProperties] = useState([]);
-  const [locators, setLocators] = useState([]);
+  const [locators, setLocators] = useState([{id: "-", fullName: "---"}]);
 
   const fetchLocators = async () => {
     const tenants = await userServices.getAllVisitors();
     const visitors = await userServices.getAllTenants();
-    setLocators([{ id: "-", fullName: "---" }, ...tenants, ...visitors]);
+    setLocators([{id: "-", fullName: "---"}, ...tenants, ...visitors]);
   };
 
   const fetchProperties = async () => {
@@ -113,7 +113,8 @@ const AddContract = () => {
 
   const curretSchema = shouldCreateNewUser ? userSchema : globalSchema;
 
-  useEffect(() => {}, [curretSchema]);
+  useEffect(() => {
+  }, [curretSchema]);
 
   const [isCreating, setIsCreating] = useState(false);
   const createUser = async (data) => {
@@ -194,7 +195,7 @@ const AddContract = () => {
 
   const {
     register,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
     watch,
   } = useForm({
@@ -493,7 +494,6 @@ const AddContract = () => {
                         locators.find((locator) => locator.id == e.target.value)
                       )
                     }
-                    // placeholder="Selectionnez le locataire"
                     error={errors.userId}
                     register={register}
                     options={locators?.map((locator) => ({
@@ -505,14 +505,23 @@ const AddContract = () => {
                   {!!selectedUser && (
                     <div className="flex w-full items-center justify-between border px-4 py-2 rounded-lg transition">
                       <div className="flex">
-                        <Icon icon="heroicons-outline:user-circle" width="38" />
+                        {
+                          selectedUser?.picture ?
+                            <img
+                              className="w-12 h-12 block bg-black-500 rounded-full border object-center object-cover"
+                              src={selectedUser?.picture}
+                              alt={`une photo de ${selectedUser?.fullName}`}
+                            /> :
+                            <Icon icon="heroicons-outline:user-circle" width="38"/>
+                        }
                         <div className="ml-2 mt-1">
-                          <span className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
+                          <span
+                            className=" block text-lg p-0 leading-4 font-medium group-hover:text-blue-600 group-hover:underline text-slate-900 w-full truncate">
                             {selectedUser?.fullName}
                           </span>
                           <div className="flex items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
                             <Icon
-                              icon="heroicons-outline:at-symbol"
+                              icon="heroicons-outline:envelope"
                               width="14"
                             />
                             <span className="ml-1">{selectedUser?.email}</span>
