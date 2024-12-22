@@ -37,6 +37,7 @@ const visitRepository = new VisitRessource(firebaseClient)
 const visitServices = new VisitService(visitRepository);
 
 const notificationRepository = new NotificationResource(firebaseClient)
+console.log(notificationRepository)
 const notificationServices = new NotificationService(notificationRepository);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

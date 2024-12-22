@@ -1,8 +1,8 @@
-import { Property } from "@/domains/property";
-import { ApiProperty, PropertyFetched } from "./ApiProperty";
-import { PropertyRepository } from "@/domains/property/repository/PropertyRepository";
-import { PropertyToSave } from "@/domains/property/types";
-import { FirebaseClient } from "@/secondary/FirebaseClient";
+import {Property} from "@/domains/property";
+import {ApiProperty, PropertyFetched} from "./ApiProperty";
+import {PropertyRepository} from "@/domains/property/repository/PropertyRepository";
+import {PropertyToSave} from "@/domains/property/types";
+import {FirebaseClient} from "@/secondary/FirebaseClient";
 
 export class PropertyRessource implements PropertyRepository {
   constructor(private readonly firebaseClient: FirebaseClient) {}
@@ -38,13 +38,12 @@ export class PropertyRessource implements PropertyRepository {
   }
 
   async create(form: PropertyToSave, files: File[]): Promise<string> {
-    const images = await Promise.all(files.map(this.firebaseClient.saveImage));
+    const images = await Promise.all(files.map(this.firebaseClient.saveImage  ));
 
-    const propertyCreatedId = await this.firebaseClient.addDocument({
+    return await this.firebaseClient.addDocument({
       collection: "Proprietes",
-      form: ApiProperty.fromProperties({ ...form, images }),
+      form: ApiProperty.fromProperties({...form, images}),
     });
-    return propertyCreatedId;
   }
 
   async update(propertyId: string, form: PropertyToSave): Promise<void> {

@@ -1,24 +1,24 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {useEffect, useState, useContext} from "react";
 import Icon from "@/ui/components/ui/Icon";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import Loading from "@/ui/components/Loading";
 import GoogleMapReact from "google-map-react";
 import imgMaker from "@/ui/assets/images/marker.png";
 import Button from "@/ui/components/ui/Button";
 import Carousel from "@/ui/components/ui/Carousel";
-import { SwiperSlide } from "swiper/react";
+import {SwiperSlide} from "swiper/react";
 import Modal from "@/ui/components/ui/Modal";
 import VideoPlayer from "@/ui/components/ui/VideoPlayer";
 import Fileinput from "@/ui/components/ui/Fileinput";
-import { PropertyView } from "@/primary/property/PropertyView";
+import {PropertyView} from "@/primary/property/PropertyView";
 import AddVisitModal from "@/ui/components/AddVisitModal";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const PropertyDetails = () => {
   const navigate = useNavigate();
-  const { isTenant } = useSelector((state) => state.auth);
-  const { propertyServices } =
+  const {isTenant, isVisitor} = useSelector((state) => state.auth);
+  const {propertyServices, notificationServices} =
     useContext<ServicesContext>(DependenciesContext);
 
   const [property, setProperty] = useState<PropertyView>({});
@@ -37,12 +37,12 @@ const PropertyDetails = () => {
     setProperty(response);
   };
 
-  const fecthResidentialType = async () => {
+  const fetchResidentialType = async () => {
     const types = await propertyServices.getResidentialTypes();
     setResidentialTypes(types);
   };
 
-  const fecthCommercialType = async () => {
+  const fetchCommercialType = async () => {
     const types = await propertyServices.getCommertialTypes();
     setCommercial(types);
   };
@@ -57,9 +57,10 @@ const PropertyDetails = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchProperty();
-    fecthResidentialType();
-    fecthCommercialType();
+    fetchResidentialType();
+    fetchCommercialType();
     setIsLoading(false);
+    console.log(isTenant);
   }, []);
 
   useEffect(() => {
@@ -241,13 +242,13 @@ const PropertyDetails = () => {
         centered
       >
         <div className="w-[90dvw] h-[80dvh] flex justify-center items-center">
-          <VideoPlayer className="w-full h-full" url={property.video} />
+          <VideoPlayer className="w-full h-full" url={property.video}/>
         </div>
       </Modal>
     );
   };
 
-  const VideoSettings = ({ videoURL, onClose, isActive, onUpdated }) => {
+  const VideoSettings = ({videoURL, onClose, isActive, onUpdated}) => {
     const [video, setVideo] = useState(undefined);
 
     const saveImage = async () => {
@@ -297,7 +298,6 @@ const PropertyDetails = () => {
     );
   };
 
-
   const toggleDisplayVisit = () => setShouldDisplayVisit(!shouldDisplayVisit);
 
   const handelOnCreated = async () => {
@@ -316,7 +316,7 @@ const PropertyDetails = () => {
         <span>Informations sur la proprietes</span>
       </div>
       {isLoading || !property.id ? (
-        <Loading />
+        <Loading/>
       ) : (
         <>
           <div className="flex flex-col">
@@ -352,23 +352,23 @@ const PropertyDetails = () => {
               <div className="lg:col-span-3 grid-cols-4 grid xl:grid-cols-2 gap-3">
                 {property?.images?.length
                   ? property?.images
-                      ?.slice(1, 5)
-                      .map((image, index) => (
-                        <img
-                          key={index}
-                          alt={`${property?.description} images ${index}`}
-                          src={image}
-                          fetchPriority="low"
-                          loading="lazy"
-                          className="w-full h-50 lg:h-[188px] object-cover rounded-md"
-                        />
-                      ))
-                  : [0, 1, 2, 3].map((index) => (
-                      <div
+                    ?.slice(1, 5)
+                    .map((image, index) => (
+                      <img
                         key={index}
-                        className="w-full h-50 lg:h-[188px] object-cover rounded-md bg-gray-100"
+                        alt={`${property?.description} images ${index}`}
+                        src={image}
+                        fetchPriority="low"
+                        loading="lazy"
+                        className="w-full h-50 lg:h-[188px] object-cover rounded-md"
                       />
-                    ))}
+                    ))
+                  : [0, 1, 2, 3].map((index) => (
+                    <div
+                      key={index}
+                      className="w-full h-50 lg:h-[188px] object-cover rounded-md bg-gray-100"
+                    />
+                  ))}
               </div>
             </section>
             <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 gap-x-8 mt-6">
@@ -377,7 +377,7 @@ const PropertyDetails = () => {
                   {name?.nom ?? ""}
                 </h1>
                 <div className="flex  items-center text-slate-400 dark:text-slate-400 text-sm mt-1">
-                  <Icon icon="heroicons-outline:map-pin" width="16" />
+                  <Icon icon="heroicons-outline:map-pin" width="16"/>
                   <span className="ml-1">
                     {`${property?.address?.street ?? ""} ${
                       property?.address?.quater ?? ""
@@ -391,13 +391,13 @@ const PropertyDetails = () => {
                 </p>
                 <div className="flex items-center mt-2 gap-6">
                   <div className="bg-white px-3 py-2 flex space-x-2 rounded-lg">
-                    <Icon icon="heroicons-outline:building-office" width="15" />
+                    <Icon icon="heroicons-outline:building-office" width="15"/>
                     <span className="text-xs">
                       {property?.numberOfBuilding ?? "1"} chambres
                     </span>
                   </div>
                   <div className="bg-white px-3 py-2 flex space-x-2 rounded-lg">
-                    <Icon icon="heroicons-outline:building-office" width="15" />
+                    <Icon icon="heroicons-outline:building-office" width="15"/>
                     <span className="text-xs">
                       {property?.numberOfBuilding ?? "1"} douches
                     </span>
@@ -418,12 +418,13 @@ const PropertyDetails = () => {
                 <div className="py-4 space-y-4">
                   <div>
                     <h2 className="text-base mt-8">Facitities</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                    <div
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                       {facilities
                         .filter((facility) => facility.value)
                         .map((facility) => (
                           <div className="flex items-center" key={facility.key}>
-                            <Icon icon={facility.icon} />
+                            <Icon icon={facility.icon}/>
                             <span className="text ml-2">{facility.label}</span>
                           </div>
                         ))}
@@ -450,7 +451,7 @@ const PropertyDetails = () => {
                 </div>
               </section>
               <section className="flex flex-col gap-y-4">
-                {isTenant && (
+                {(isTenant || isVisitor) && (
                   <Button
                     icon="heroicons-outline:calendar"
                     text="Programmer une visite"
@@ -464,7 +465,7 @@ const PropertyDetails = () => {
                       to={`/owner/properties/${params.id}/edit`}
                       className="bg-slate-900 text-white w-full flex space-x-3 rounded justify-center items-center px-6 py-3"
                     >
-                      <Icon icon="heroicons-outline:pencil-square" />
+                      <Icon icon="heroicons-outline:pencil-square"/>
                       <span>Edit</span>
                     </Link>
                     <Button
@@ -492,7 +493,7 @@ const PropertyDetails = () => {
                         to={`/owner/contracts/add/?property=${params.id}`}
                         className="btn-ligth  border-dashed border-slate-900 flex space-x-3 rounded justify-center items-center px-3 py-1"
                       >
-                        <Icon icon="heroicons-outline:plus" />
+                        <Icon icon="heroicons-outline:plus"/>
                         <span>Nouveau</span>
                       </Link>
                     )}
@@ -503,8 +504,8 @@ const PropertyDetails = () => {
               </section>
             </section>
           </div>
-          <Gallery />
-          <Video />
+          <Gallery/>
+          <Video/>
           <VideoSettings
             videoURL={property.video}
             isActive={shouldDisplayVideoSettings}
@@ -515,7 +516,7 @@ const PropertyDetails = () => {
             }}
           />
           <AddVisitModal
-            isActive={shouldDisplayVisit}
+            isActive={false /*shouldDisplayVisit*/}
             onClose={toggleDisplayVisit}
             onCreated={handelOnCreated}
             ownerId={property.userId}

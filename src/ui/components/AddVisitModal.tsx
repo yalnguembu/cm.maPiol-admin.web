@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useState} from "react";
 import Button from "@/ui/components/ui/Button";
 import Modal from "@/ui/components/ui/Modal";
 import Textinput from "@/ui/components/ui/Textinput";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-toastify";
-import { DependenciesContext } from "@/utils/useDependencies";
+import {toast} from "react-toastify";
+import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 type Props = {
   onCreated: () => Promise<void>;
@@ -17,9 +17,9 @@ type Props = {
   tenantId: string;
 };
 const AddVisitModal = (props: Props) => {
-  const { onCreated, isActive, onClose, ownerId, propertyId, tenantId } = props;
-  const { visitServices } =
-    useContext(DependenciesContext);
+  const {onCreated, isActive, onClose, ownerId, propertyId, tenantId} = props;
+  const {visitServices, notificationServices} =
+    useContext<ServicesContext>(DependenciesContext);
 
   const [time, setStartDate] = useState<string>("");
   const [date, setEndDate] = useState<string>("");
@@ -36,7 +36,7 @@ const AddVisitModal = (props: Props) => {
 
   const {
     register,
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
   } = useForm({
     resolver: yupResolver(schema),
@@ -46,15 +46,7 @@ const AddVisitModal = (props: Props) => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      console.log(
-        date,
-        time,
-        details,
-        ownerId,
-        propertyId,
-        tenantId);
-      
-      const userId = await visitServices.createVisit({
+      const visiteId = await visitServices.createVisit({
         date,
         time,
         details,
@@ -63,9 +55,25 @@ const AddVisitModal = (props: Props) => {
         tenantId,
         status: 0,
       });
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: visiteId,
+        notifiableType: "AgendaVisites",
+        receiver: ownerId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Une visite entre le proprietaire et vous a ete cale!",
+          title: "Nouvelle Visite",
+          icon: "contract"
+        },
+      });
 
-        toast.success("Visit cree avec succes");
-        await onCreated();
+      toast.success("Visit cree avec succes");
+      await onCreated();
     } catch (error) {
       toast.error("Erreur lors de la creation, veuillez réessayer");
       console.log(error);
@@ -84,14 +92,18 @@ const AddVisitModal = (props: Props) => {
         title="Nouvel visite"
       >
         <form
-        onReset={onClose}
+          onReset={onClose}
           onSubmit={handleSubmit(onSubmit)}
           className="gap-4 grid"
         >
+          <label
+            className="block capitalize"
+          >
+            Dates probable
+          </label>
           <Textinput
             name="startDate"
             value={time}
-            label="Date"
             type="date"
             register={register}
             error={errors.startDate}

@@ -55,6 +55,7 @@ export class VisitRessource implements VisitRepository {
   }
 
   async create(form: VisitToSave): Promise<string> {
+    console.log(form);
     return await this.firebaseClient.addDocument({
       collection: "AgendaVisites",
       form: ApiVisit.fromProperties(form),

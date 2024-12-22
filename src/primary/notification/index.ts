@@ -8,9 +8,9 @@ import {NotificationId} from "@/domains/notification/types";
 import {NotificationToSave} from "@/domains/notification/types";
 
 export class NotificationService {
-  private getMinesUseCase: GetMinesUseCase;
-  private readUseCase: ReadUseCase;
-  private createUseCase: CreateUseCase;
+  private readonly getMinesUseCase: GetMinesUseCase;
+  private readonly readUseCase: ReadUseCase;
+  private readonly createUseCase: CreateUseCase;
 
   constructor(notificationRepository: NotificationRepository) {
     this.getMinesUseCase = new GetMinesUseCase(notificationRepository);

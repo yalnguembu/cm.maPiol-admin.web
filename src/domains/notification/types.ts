@@ -23,7 +23,8 @@ export type NotificationProperties = {
     details?: NotificationDetails;
     icon?: NotificationIcon;
     title?: NotificationTitle;
-  }
+  },
+  receiver: string;
 }
 
 export type NotificationToSave = Omit<NotificationProperties, "id">

@@ -39,7 +39,8 @@ export class ApiNotification {
   static fromProperties(
     notification: NotificationProperties
   ): Omit<NotificationFetched, "id"> {
-    return {
+
+    const baseNotification = {
       createdAt: notification.createdAt,
       deleted_at: notification.deletedAt,
       notifiableId: notification.notifiableId,
@@ -52,7 +53,14 @@ export class ApiNotification {
         details: notification.data.details,
         icon: notification.data.icon,
         titre: notification.data.title,
-      }
+      },
+      recepteur: notification.receiver,
     };
+    return Object.entries(baseNotification)
+      .filter(([key, value]) => value !== undefined && value !== null)
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+      }, {});
   }
 }

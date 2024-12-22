@@ -65,7 +65,8 @@ export class ApiContract {
   static fromProperties(
     contract: ContractProperties
   ): Omit<ContractFetched, "id"> {
-    return {
+
+    const contractToParse = {
       dateDebutContrat: contract.startDate,
       paiementDueDate: contract.paymentDate,
       dateFinContrat: contract.endDate,
@@ -85,6 +86,12 @@ export class ApiContract {
       approuveParLocatire: contract.approvedByOwner,
       approuveParProprietaire: contract.approvedByTenant,
     };
+    return Object.entries(contractToParse)
+      .filter(([key, value]) => value !== undefined && value !== null)
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+      }, {});
   }
 }
 

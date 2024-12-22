@@ -13,7 +13,7 @@ import {useSelector} from "react-redux";
 import SignContractModal from "@/ui/components/SignContractModal";
 
 const ContractDetails = () => {
-  const {contractServices, userServices, propertyServices} =
+  const {contractServices, userServices, propertyServices, notificationServices} =
     useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const {isTenant, isOwner} = useSelector((state) => state.auth);
@@ -69,11 +69,42 @@ const ContractDetails = () => {
     setIsSigning(true);
     if (isOwner) {
       await contractServices?.signContract(contract.id, "owner");
-      if (contract.approvedByTenant) await contractServices.update({status: 2})
+      if (contract.approvedByTenant) await contractServices.update({status: 2});
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: contract.id,
+        notifiableType: "Contrats",
+        receiver: contract.tenantId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Le proprietaire a aprouve le contrat",
+          title: "Contrat aprouve",
+          icon: "contract"
+        },
+      });
     } else {
       await contractServices?.signContract(contract.id, "tenant");
       if (contract.approvedByOwner) await contractServices.update({status: 2})
-
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: contract.id,
+        notifiableType: "Contrats",
+        receiver: contract.ownerId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Le locataire a aprouve le contrat",
+          title: "Contrat aprouve",
+          icon: "contract"
+        },
+      });
     }
     setIsSigning(false);
     toggleSignContract();

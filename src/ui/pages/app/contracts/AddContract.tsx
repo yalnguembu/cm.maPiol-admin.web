@@ -13,7 +13,7 @@ import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 import {UserView} from "@/primary/user/UserView";
 
 const AddContract = () => {
-  const {contractServices, userServices, propertyServices} =
+  const {contractServices, userServices, propertyServices, notificationServices} =
     useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
 
@@ -23,15 +23,15 @@ const AddContract = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
-  const [duration, setDration] = useState("");
-  const [frequency, setFrequence] = useState("");
+  const [duration, setDuration] = useState("");
+  const [frequency, setFrequency] = useState("");
   const [devise, setDevise] = useState("");
   const [amountPresume, setAmountPresume] = useState("");
   const [amountGive, setAmountGive] = useState("");
   const [amountCaution, setAmountCaution] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [durationCaution, setDurationCaution] = useState("");
-  const [delaiCaution, setDelaiCaution] = useState("");
+  const [delayCaution, setDelayCaution] = useState("");
   const [durationPreavis, setDurationPreavis] = useState("");
   const [propertyId, setPropertyId] = useState("");
 
@@ -92,7 +92,7 @@ const AddContract = () => {
     amountCaution: yup.string().required("Ce champs est requis"),
     paymentMethod: yup.string().required("Ce champs est requis"),
     durationCaution: yup.string().required("Ce champs est requis"),
-    delaiCaution: yup.string().required("Ce champs est requis"),
+    delayCaution: yup.string().required("Ce champs est requis"),
     durationPreavis: yup.string().required("Ce champs est requis"),
   });
 
@@ -111,10 +111,10 @@ const AddContract = () => {
     phoneNumber: yup.string().required("Ce champs est requis"),
   });
 
-  const curretSchema = shouldCreateNewUser ? userSchema : globalSchema;
+  const currentSchema = shouldCreateNewUser ? userSchema : globalSchema;
 
   useEffect(() => {
-  }, [curretSchema]);
+  }, [currentSchema]);
 
   const [isCreating, setIsCreating] = useState(false);
   const createUser = async (data) => {
@@ -136,7 +136,7 @@ const AddContract = () => {
       startDate: startDate,
       endDate: endDate,
       paymentDate: paymentDate,
-      returnTimeDeposit: data.delaiCaution,
+      returnTimeDeposit: data.delayCaution,
       devise: data.devise,
       preadviceDuration: data.durationPreavis,
       contractDuration: data.duration,
@@ -158,8 +158,25 @@ const AddContract = () => {
         currency: data.devise,
       },
       amountDepositDuration: {
-        value: data.delaiCaution,
+        value: data.delayCaution,
         currency: data.devise,
+      },
+    });
+
+    await notificationServices.create({
+      createdAt: new Date().toISOString(),
+      deletedAt: "",
+      readAt: "",
+      updatedAt: "",
+      notifiableId: response,
+      notifiableType: "Contrats",
+      receiver: data.selectedUser?.id ?? data.userId,
+      status: 0,
+      type: 0,
+      data: {
+        details: "Un contrat a ete emis envers vous pour une propriete jettez y un coup d'oeil",
+        title: "Vous avez un contrat",
+        icon: "contract"
       },
     });
     return response;
@@ -199,7 +216,7 @@ const AddContract = () => {
     handleSubmit,
     watch,
   } = useForm({
-    resolver: yupResolver(curretSchema),
+    resolver: yupResolver(currentSchema),
     mode: "all",
   });
 
@@ -259,7 +276,7 @@ const AddContract = () => {
                 <Textinput
                   label="Duree"
                   value={duration}
-                  onChange={(e) => setDration(e.target.value)}
+                  onChange={(e) => setDuration(e.target.value)}
                   type="text"
                   placeholder="Durre"
                   name="duration"
@@ -269,7 +286,7 @@ const AddContract = () => {
                 <Select
                   label="Frequence"
                   value={frequency}
-                  onChange={(e) => setFrequence(e.target.value)}
+                  onChange={(e) => setFrequency(e.target.value)}
                   placeholder="Selectionnez la frequency"
                   error={errors.frequency}
                   register={register}
@@ -342,12 +359,12 @@ const AddContract = () => {
                 />
                 <Textinput
                   label="Delais de restitution de la caution"
-                  value={delaiCaution}
-                  onChange={(e) => setDelaiCaution(e.target.value)}
+                  value={delayCaution}
+                  onChange={(e) => setDelayCaution(e.target.value)}
                   type="text"
                   placeholder="Entrez le Delais de restitution de la caution"
-                  name="delaiCaution"
-                  error={errors.delaiCaution}
+                  name="delayCaution"
+                  error={errors.delayCaution}
                   register={register}
                 />
                 <Textinput

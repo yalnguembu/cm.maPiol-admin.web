@@ -13,7 +13,7 @@ import {VisitView} from "@/primary/visit/VisitView";
 import {VisitStatus} from "@/domains/visit/VisitDate";
 
 const VisitGridList = () => {
-  const {visitServices, userServices, propertyServices} =
+  const {visitServices, userServices, propertyServices, notificationServices} =
     useContext<ServicesContext>(DependenciesContext);
   const navigate = useNavigate();
   const {isAdmin, isTenant} = useSelector((state) => state.auth);
@@ -111,12 +111,12 @@ const VisitGridList = () => {
       setProperty(response);
     };
 
-    const fecthResidentialType = async () => {
+    const fetchResidentialType = async () => {
       const types = await propertyServices.getResidentialTypes();
       setResidentialTypes(types);
     };
 
-    const fecthCommercialType = async () => {
+    const fetchCommercialType = async () => {
       const types = await propertyServices.getCommertialTypes();
       setCommercial(types);
     };
@@ -131,16 +131,48 @@ const VisitGridList = () => {
 
     const cancelVisit = async (id: string, index: number) => {
       await visitServices.cancel(visit.id, index);
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: visit.id,
+        notifiableType: "AgendaVisites",
+        receiver: visit.tenantId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Malheuresement le proprietaires n'est pas disponible pour une visite ce jour.",
+          title: "Visites refuser",
+          icon: "visit"
+        },
+      });
     };
     const acceptVisit = async (id: string, index: number) => {
       await visitServices.accept(visit.id, index);
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: visit.id,
+        notifiableType: "AgendaVisites",
+        receiver: visit.tenantId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Une visite entre le proprietaire et vous a ete cale!",
+          title: "Visites Accepter",
+          icon: "visit"
+        },
+      });
     };
 
     useEffect(() => {
       setIsLoading(true);
       fetchProperty();
-      fecthResidentialType();
-      fecthCommercialType();
+      fetchResidentialType();
+      fetchCommercialType();
       setIsLoading(false);
     }, []);
 
