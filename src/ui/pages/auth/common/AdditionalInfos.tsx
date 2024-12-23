@@ -106,7 +106,7 @@ const AdditionalInfos = ({userId}) => {
                   <Textinput
                     name="address"
                     label="Adresse"
-                    type="date"
+                    type="text"
                     register={register}
                     error={errors.address}
                     value={address}
