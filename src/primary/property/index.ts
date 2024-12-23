@@ -52,7 +52,7 @@ export class PropertyService {
     return await this.createUseCase.execute(property, images);
   }
 
-  async updateProperty(propertyId: PropertyId, form: PropertyToSave) {
+  async update(propertyId: PropertyId, form: PropertyToSave) {
     return await this.updateUseCase.execute(propertyId, form);
   }
 

@@ -1,10 +1,10 @@
-import { UserRepository } from "@/domains/notification/repository/NotificationRepository";
 import { UserToSave } from "@/domains/user/types";
+import {PropertyRepository} from "@/domains/property/repository/PropertyRepository";
 
 export class UpdateUserUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly propertyRepository: PropertyRepository) {}
 
   async execute(id: string, form: UserToSave): Promise<void> {
-    await this.userRepository.updateUser(id, form);
+    await this.propertyRepository.update(id, form);
   }
 }

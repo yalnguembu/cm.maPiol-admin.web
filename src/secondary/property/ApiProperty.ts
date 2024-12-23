@@ -37,7 +37,7 @@ export type PropertyFetched = {
   };
   prix: number;
   quartier: string;
-  status: number;
+  statut: number;
   surface: number;
   type: PropertyType;
   usage: number;
@@ -58,7 +58,7 @@ export class ApiProperty {
         value: apiProperty.prix ?? 0,
         currency: apiProperty.devise ?? "XAF",
       },
-      state: apiProperty.status ?? 0,
+      state: apiProperty.statut ?? 0,
       hasAssensor: apiProperty.existAscenseur ?? false,
       hasBalcony: apiProperty.existBalcon ?? false,
       hasCave: apiProperty.existCave ?? false,
@@ -91,7 +91,7 @@ export class ApiProperty {
           longitude: apiProperty.position?.lng ?? 0.0,
         },
       },
-      status: apiProperty.status ?? 0,
+      status: apiProperty.statut ?? 0,
       surface: apiProperty.surface ?? 0,
       type: apiProperty.type ?? 1,
       usage: apiProperty.usage ?? 0,
@@ -109,7 +109,7 @@ export class ApiProperty {
       description: apiProperty.description,
       prix: apiProperty.price.value,
       devise: apiProperty.price.currency,
-      status: apiProperty.status,
+      statut: apiProperty.status,
       existAscenseur: apiProperty.hasAssensor,
       existBalcon: apiProperty.hasBalcony,
       existCave: apiProperty.hasCave,

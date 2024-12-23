@@ -17,7 +17,7 @@ import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 
 const PropertyDetails = () => {
   const navigate = useNavigate();
-  const {isTenant, isVisitor} = useSelector((state) => state.auth);
+  const {isTenant, isVisitor, isAdmin} = useSelector((state) => state.auth);
   const {propertyServices, notificationServices} =
     useContext<ServicesContext>(DependenciesContext);
 
@@ -33,7 +33,6 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     const response = await propertyServices.getPropertyById(params.id);
-
     setProperty(response);
   };
 
@@ -60,7 +59,6 @@ const PropertyDetails = () => {
     fetchResidentialType();
     fetchCommercialType();
     setIsLoading(false);
-    console.log(isTenant);
   }, []);
 
   useEffect(() => {
@@ -305,6 +303,36 @@ const PropertyDetails = () => {
     await fetchProperty();
   };
 
+  const activate = async () => {
+    try {
+      // setIsLoading(true);
+      await propertyServices.update(property.id, {
+        statut: 1,
+      });
+      await notificationServices.create({
+        createdAt: new Date().toISOString(),
+        deletedAt: "",
+        readAt: "",
+        updatedAt: "",
+        notifiableId: property.id,
+        notifiableType: "Proprietes",
+        receiver: property.userId,
+        status: 0,
+        type: 0,
+        data: {
+          details: "Votre propriete est desormais visible par tout les utilisateurs felicitations!",
+          title: "Propriete aprouve",
+          icon: "contract"
+        },
+      });
+      fetchProperty();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      // setIsLoading(false);
+    }
+  }
+
   return (
     <div>
       <div className="flex space-x-4 pb-4 items-center">
@@ -456,6 +484,14 @@ const PropertyDetails = () => {
                     icon="heroicons-outline:calendar"
                     text="Programmer une visite"
                     onClick={toggleDisplayVisit}
+                    className=" btn btn-dark "
+                  />
+                )}
+                {isAdmin && property.status === 0 && (
+                  <Button
+                    icon="heroicons-outline:check"
+                    text="Aprouver"
+                    onClick={activate}
                     className=" btn btn-dark "
                   />
                 )}
