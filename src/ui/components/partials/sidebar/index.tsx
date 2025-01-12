@@ -18,8 +18,6 @@ const Sidebar = () => {
   const [scroll, setScroll] = useState(false);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
 
-  // const user = auth.currentUser;
-
   const {
     user: profile,
     isAdmin,
@@ -38,18 +36,6 @@ const Sidebar = () => {
   );
 
   useEffect(() => {
-    // console.log([isAdmin, isOwner, isTenant],profile)
-  }, []);
-
-  // const menuItems = isAdmin
-  //   ? adminMenus
-  //   : isOwner
-  //     ? ownerMenus
-  //     : isTenant
-  //       ? tenantMenus
-  //       : visitorMenus;
-
-  useEffect(() => {
     const handleScroll = () => {
       if (scrollableNodeRef.current.scrollTop > 0) {
         setScroll(true);
@@ -59,9 +45,6 @@ const Sidebar = () => {
     };
 
     scrollableNodeRef.current.addEventListener("scroll", handleScroll);
-    // const fetchDataInterval = setInterval(recuperer, 5000); // 5 seconds
-
-    // return () => clearInterval(fetchDataInterval); // Cleanup on unmount
   }, []);
 
   const [collapsed, setMenuCollapsed] = useSidebar();

@@ -1,21 +1,41 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {useRef, useEffect, useState, useMemo} from "react";
 import Navmenu from "./Navmenu";
-import { menuItems } from "@/utils/menus";
 import SimpleBar from "simplebar-react";
 import useSemiDark from "@/ui/hooks/useSemiDark";
 import useDarkMode from "@/ui/hooks/useDarkMode";
 import { Link } from "react-router-dom";
 import useMobileMenu from "@/ui/hooks/useMobileMenu";
 import Icon from "@/ui/components/ui/Icon";
-
-// import images
+import {
+  visitorMenus,
+  adminMenus,
+  ownerMenus,
+  tenantMenus,
+} from "@/utils/menus";
 import MobileLogo from "@/ui/assets/images/logo/logo.png";
 import MobileLogoWhite from "@/ui/assets/images/logo/logo.png";
+import {useSelector} from "react-redux";
 
 const MobileMenu = ({ className = "custom-class" }) => {
   const scrollableNodeRef = useRef();
   const [scroll, setScroll] = useState(false);
 
+  const {
+    user: profile,
+    isAdmin,
+    isOwner,
+    isTenant,
+  } = useSelector((state) => state.auth);
+
+  const menuItems = useMemo(() => isAdmin
+      ? adminMenus
+      : isOwner
+        ? ownerMenus
+        : isTenant
+          ? tenantMenus
+          : visitorMenus,
+    [profile]
+  );
   useEffect(() => {
     const handleScroll = () => {
       if (scrollableNodeRef.current.scrollTop > 0) {
@@ -71,24 +91,6 @@ const MobileMenu = ({ className = "custom-class" }) => {
         scrollableNodeProps={{ ref: scrollableNodeRef }}
       >
         <Navmenu menus={menuItems} />
-        {/* <div className="bg-slate-900 mb-24 lg:mb-10 mt-24 p-4 relative text-center rounded-2xl text-white">
-          <img
-            src={svgRabitImage}
-            alt=""
-            className="mx-auto relative -mt-[73px]"
-          />
-          <div className="max-w-[160px] mx-auto mt-6">
-            <div className="widget-title">Unlimited Access</div>
-            <div className="text-xs font-light">
-              Upgrade your system to business plan
-            </div>
-          </div>
-          <div className="mt-6">
-            <button className="btn bg-white hover:bg-opacity-80 text-slate-900 btn-sm w-full block">
-              Upgrade
-            </button>
-          </div>
-        </div> */}
       </SimpleBar>
     </div>
   );
