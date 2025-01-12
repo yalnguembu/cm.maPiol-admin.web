@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Loading from "@/ui/components/Loading";
 import Card from "@/ui/components/ui/Card";
 import Button from "@/ui/components/ui/Button";
 import {ServicesContext, useDependencies} from "@/utils/useDependencies";
-import { UserView } from "@/primary/UserView";
-import { useSelector } from "react-redux";
-import { State } from "@/ui/store/rootReducer";
+import {UserView} from "@/primary/UserView";
+import {useSelector} from "react-redux";
+import {State} from "@/ui/store/rootReducer";
 import AddUserModal from "@/ui/components/users/AddUserModal";
 import EditUserModal from "@/ui/components/users/EditUserModal";
 import UserDetailsModal from "@/ui/components/users/UserDetailsModal";
@@ -24,6 +24,9 @@ const columns = [
     label: "N_ CNI",
   },
   {
+    label: "Statut",
+  },
+  {
     label: "Action",
   },
 ];
@@ -34,19 +37,21 @@ enum UserType {
   "OWNER" = "Propriétaires",
   "ADMIN" = "Administrateurs",
 }
+
 type UserListProps = {
   userType: "ADMIN" | "OWNER" | "TENANT" | "VISITOR";
 };
 
-const UsersList = ({ userType }: UserListProps) => {
-  const { userServices } = useDependencies<ServicesContext>();
+const UsersList = ({userType}: UserListProps) => {
+  const {userServices} = useDependencies<ServicesContext>();
 
-  const { isAdmin } = useSelector((state: State) => state.auth);
+  const {isAdmin} = useSelector((state: State) => state.auth);
 
   const [users, setUsers] = useState<UserView[]>([]);
   const [activeUser, setActiveUser] = useState<UserView | null>(null);
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const fetchUsersByType = async () => {
     setIsLoading(true);
@@ -55,12 +60,19 @@ const UsersList = ({ userType }: UserListProps) => {
       userType === "OWNER"
         ? await userServices.getAllOwners()
         : userType === "TENANT"
-        ? await userServices.getAllTenants()
-        : await userServices.getAllVisitors();
+          ? await userServices.getAllTenants()
+          : await userServices.getAllVisitors();
 
     setUsers(response);
     setIsLoading(false);
   };
+
+  const activateUserAccount = async (id: string) => {
+    setIsSaving(true);
+    await userServices.updateUser(id, {statut: 1});
+    setIsSaving(false);
+    fetchUsersByType();
+  }
 
   useEffect(() => {
     fetchUsersByType();
@@ -85,7 +97,7 @@ const UsersList = ({ userType }: UserListProps) => {
     <div>
       <h1 className="text-xl lg:text-2xl xl:text-3xl my-4">Utilisateurs</h1>
       {isLoading ? (
-        <Loading />
+        <Loading/>
       ) : (
         <Card
           title={`${UserType[userType]}`}
@@ -116,61 +128,81 @@ const UsersList = ({ userType }: UserListProps) => {
               <div className="overflow-hidden ">
                 <table className="min-w-full divide-y divide-slate-800 border-t table-fixed dark:divide-slate-100">
                   <thead className="bg-slate-800 dark:bg-slate-100">
-                    <tr>
-                      {columns.map((column, i) => (
-                        <th
-                          key={i}
-                          scope="col"
-                          className=" table-th  text-white "
-                        >
-                          {column.label}
-                        </th>
-                      ))}
-                    </tr>
+                  <tr>
+                    {columns.map((column, i) => (
+                      <th
+                        key={i}
+                        scope="col"
+                        className=" table-th  text-white "
+                      >
+                        {column.label}
+                      </th>
+                    ))}
+                  </tr>
                   </thead>
                   {users.length ? (
                     <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
-                      {users.map((row) => (
-                        <tr
-                          onDoubleClick={() => {
-                            toggleShouldDisplayDetails();
-                            setUserId(row.id);
-                          }}
-                          key={row.id}
-                          className="hover:bg-slate-200 hover:cursor-pointer dark:hover:bg-slate-700"
-                        >
-                          <td className="table-td font-semibold text-slate-800">
-                            {row?.fullName}
-                          </td>
-                          <td className="table-td font-semibold text-gray-500">
-                            {row?.email}
-                          </td>
-                          <td className="table-td">{row?.phoneNumber}</td>
-                          <td className="table-td">{row?.idCardNumber}</td>
-                          <td>
-                            <div className="flex gap-2">
-                              <Button
-                                size={14}
-                                icon="heroicons-outline:eye"
-                                className="btn btn-light p-1.5 rounded-full"
-                                onClick={() => {
-                                  toggleShouldDisplayDetails();
-                                  setUserId(row.id);
-                                }}
-                              />
-                              <Button
-                                icon="heroicons-outline:pencil"
-                                size={14}
-                                className="btn btn-light p-1.5 rounded-full"
-                                onClick={() => {
-                                  toggleShouldEdit();
-                                  setUserId(row.id);
-                                }}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                    {users.map((row) => (
+                      <tr
+                        onDoubleClick={() => {
+                          toggleShouldDisplayDetails();
+                          setUserId(row.id);
+                        }}
+                        key={row.id}
+                        className="hover:bg-slate-200 hover:cursor-pointer dark:hover:bg-slate-700"
+                      >
+                        <td className="table-td font-semibold text-slate-800">
+                          {row?.fullName}
+                        </td>
+                        <td className="table-td font-semibold text-gray-500">
+                          {row?.email}
+                        </td>
+                        <td className="table-td">{row?.phoneNumber}</td>
+                        <td className="table-td">{row?.idCardNumber}</td>
+                        <td className="table-td">
+                          {
+                            row?.status === 1
+                              ? <div
+                                className="px-2 py-1 bg-green-100 text-green-500 rounded-full text-center font-semibold">Actif</div>
+                              : <div
+                                className="px-2 py-1 bg-yellow-100 text-yellow-500 rounded-full text-center font-semibold">Inactif</div>
+                          }
+                        </td>
+                        <td>
+                          <div className="flex gap-2">
+                            <Button
+                              size={14}
+                              icon="heroicons-outline:eye"
+                              className="btn btn-light p-1.5 rounded-full"
+                              onClick={() => {
+                                toggleShouldDisplayDetails();
+                                setUserId(row.id);
+                              }}
+                            />
+                            <Button
+                              icon="heroicons-outline:pencil"
+                              size={14}
+                              className="btn btn-light p-1.5 rounded-full"
+                              onClick={() => {
+                                toggleShouldEdit();
+                                setUserId(row.id);
+                              }}
+                            />
+                            {
+                              row.status !== 1
+                                ? <Button
+                                  icon="heroicons-outline:check"
+                                  size={14}
+                                  disabled={isSaving}
+                                  className="btn btn-light p-1.5 rounded-full"
+                                  onClick={() => activateUserAccount(row.id)}
+                                />
+                                : <></>
+                            }
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                     </tbody>
                   ) : (
                     <caption className="caption-bottom text-center py-24">

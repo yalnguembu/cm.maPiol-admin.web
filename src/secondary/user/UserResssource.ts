@@ -29,7 +29,7 @@ export class UserRessource implements UserRepository {
       collection: "Users",
       field: "typeUsersId",
       operator: "==",
-      value: 2,
+      value: 3,
     });
     return apiOwners.map(ApiUser.toDomain);
   }
@@ -41,7 +41,7 @@ export class UserRessource implements UserRepository {
       collection: "Users",
       field: "typeUsersId",
       operator: "==",
-      value: 1,
+      value: 2,
     });
     return apiOwners.map(ApiUser.toDomain);
   }
