@@ -1,5 +1,5 @@
-import React, { Suspense, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import React, {Suspense, useEffect, useRef} from "react";
+import {Outlet, useNavigate} from "react-router-dom";
 import Header from "@/ui/components/partials/header";
 import Sidebar from "@/ui/components/partials/sidebar";
 import Settings from "@/ui/components/partials/settings";
@@ -12,12 +12,17 @@ import Footer from "@/ui/components/partials/footer";
 import MobileMenu from "../partials/sidebar/MobileMenu";
 import useMobileMenu from "@/ui/hooks/useMobileMenu";
 import MobileFooter from "@/ui/components/partials/footer/MobileFooter";
-import { ToastContainer } from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import Loading from "@/ui/components/Loading";
-import { motion  } from "framer-motion";
+import {motion} from "framer-motion";
+
+import {onAuthStateChanged} from "firebase/auth";
+
+import { auth } from "@/utils/configs/firebase";
 
 const Layout = () => {
-  const { width, breakpoints } = useWidth();
+  const navigate = useNavigate();
+  const {width, breakpoints} = useWidth();
   const [collapsed] = useSidebar();
 
   const switchHeaderClass = () => {
@@ -29,6 +34,7 @@ const Layout = () => {
       return "ltr:ml-[248px] rtl:mr-[248px]";
     }
   };
+
   // content width
   const [contentWidth] = useContentWidth();
   const [menuType] = useMenulayout();
@@ -37,12 +43,23 @@ const Layout = () => {
   const [mobileMenu, setMobileMenu] = useMobileMenu();
   const nodeRef = useRef(null);
 
+  useEffect(() => {
+    console.log("hey");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user)
+      if (!user) {
+        navigate("/auth/login");
+        // L'utilisateur n'est pas authentifié
+      }
+    });
+    return () => unsubscribe();
+  }, []);
   return (
     <>
-      <ToastContainer />
-      <Header className={width > breakpoints.lg ? switchHeaderClass() : ""} />
+      <ToastContainer/>
+      <Header className={width > breakpoints.lg ? switchHeaderClass() : ""}/>
       {menuType === "vertical" && width >= breakpoints.lg && !menuHidden && (
-        <Sidebar />
+        <Sidebar/>
       )}
       <MobileMenu
         className={`${
@@ -58,7 +75,7 @@ const Layout = () => {
           onClick={() => setMobileMenu(false)}
         ></div>
       )}
-      <Settings />
+      <Settings/>
       <div
         className={`content-wrapper transition-all duration-150 ${
           width > 1024 ? switchHeaderClass() : ""
@@ -71,7 +88,7 @@ const Layout = () => {
               contentWidth === "boxed" ? "container mx-auto" : "container-fluid"
             }
           >
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading/>}>
               <motion.div
                 key={location.pathname}
                 initial="pageInitial"
@@ -97,15 +114,15 @@ const Layout = () => {
                   duration: 0.5,
                 }}
               >
-                {<Outlet />}
+                {<Outlet/>}
               </motion.div>
             </Suspense>
           </div>
         </div>
       </div>
-      {width < breakpoints.md && <MobileFooter />}
+      {width < breakpoints.md && <MobileFooter/>}
       {width > breakpoints.md && (
-        <Footer className={width > breakpoints.lg ? switchHeaderClass() : ""} />
+        <Footer className={width > breakpoints.lg ? switchHeaderClass() : ""}/>
       )}
     </>
   );
