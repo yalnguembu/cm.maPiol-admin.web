@@ -35,8 +35,7 @@ const Login = () => {
                 className="w-full"
               />
             </Link>
-          </div>
-        </div>
+          </div>plugi</div>
         <div className="right-column relative lg:w-1/2 flex flex-col justify-center items-center p-4">
           <div className="inner-content w-full max-w-lg flex flex-col bg-white dark:bg-slate-800 p-6 rounded-lg">
             <div className="auth-box flex flex-col justify-center">

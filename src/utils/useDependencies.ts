@@ -8,6 +8,8 @@ import type {UserRepository} from "@/domains/user/repository/UserRepository";
 import type {PropertyRepository} from "@/domains/property/repository/PropertyRepository";
 import type {ContractRepository} from "@/domains/contract/repository/ContractRepository";
 import type {NotificationRepository} from "@/domains/notification/repository/NotificationRepository";
+import { VisitService } from "@/primary/visit";
+import { ChatService } from "@/primary/chat";
 
 export const useDependencies = () => {
   const firebaseClient = new FirebaseClient();
@@ -28,6 +30,8 @@ export const DependenciesContext = createContext<ServicesContext>({
   propertyServices: null,
   contractServices: null,
   notificationServices: null,
+  visitServices: null,
+  chatServices: null,
 });
 
 
@@ -36,4 +40,6 @@ export type ServicesContext = {
   propertyServices: PropertyRepository,
   contractServices: ContractRepository,
   notificationServices: NotificationRepository,
+  visitServices: VisitService,
+  chatServices: ChatService,
 }

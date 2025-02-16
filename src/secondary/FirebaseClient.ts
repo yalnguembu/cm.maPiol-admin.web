@@ -13,7 +13,7 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { generateUUID } from "@/utils/uid";
 
-type Collection = "Users" | "Properties";
+type Collection = "Users" | "Properties" | "Messages" | "Conversations" | "AgendaVisites" | "Contracts";
 
 type RequestProperties = {
   collection: Collection;
@@ -113,6 +113,25 @@ export class FirebaseClient {
       );
 
       const queryResult = await uploadBytes(storageRef, image);
+      const imageUrl = await getDownloadURL(queryResult.ref);
+      console.log(imageUrl);
+      
+      return imageUrl;
+    } catch (error) {
+      console.error("saveImage: ", error);
+      throw error;
+    }
+  }
+
+  async saveFile(file: File) {
+    try {
+      const imageType = file.type.split("/").at(-1);
+      const storageRef = ref(
+        imgdb,
+        `files/${generateUUID()}.${imageType}`
+      );
+
+      const queryResult = await uploadBytes(storageRef, file);
       const imageUrl = await getDownloadURL(queryResult.ref);
       console.log(imageUrl);
       

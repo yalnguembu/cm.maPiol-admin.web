@@ -88,7 +88,7 @@ export const visitorMenus = [
     title: "messagerie",
     isHide: true,
     icon: "heroicons-outline:chat",
-    link: "chat",
+    link: "/chat",
   },
   {
     title: "annonce",
@@ -139,7 +139,7 @@ export const tenantMenus = [
     title: "messagerie",
     isHide: true,
     icon: "heroicons-outline:chat",
-    link: "tenant/chat",
+    link: "/chat",
   },
   {
     title: "annonce",
@@ -190,7 +190,7 @@ export const ownerMenus = [
     title: "messagerie",
     isHide: true,
     icon: "heroicons-outline:chat",
-    link: "owner/chat",
+    link: "/chat",
   },
   {
     title: "annonce",
@@ -261,7 +261,7 @@ export const adminMenus = [
     title: "messagerie",
     isHide: true,
     icon: "heroicons-outline:chat",
-    link: "admin/chat",
+    link: "/chat",
   },
   {
     title: "annonce",

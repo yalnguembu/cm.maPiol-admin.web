@@ -18,10 +18,10 @@ import {DependenciesContext, ServicesContext} from "@/utils/useDependencies";
 const PropertyDetails = () => {
   const navigate = useNavigate();
   const {isTenant, isVisitor, isAdmin} = useSelector((state) => state.auth);
-  const {propertyServices, notificationServices} =
+  const {propertyServices, notificationServices, chatServices} =
     useContext<ServicesContext>(DependenciesContext);
 
-  const [property, setProperty] = useState<PropertyView>({});
+  const [property, setProperty] = useState<PropertyView>({} as PropertyView);
   const [isLoading, setIsLoading] = useState(false);
   const [residentialTypes, setResidentialTypes] = useState([]);
   const [commercialTypes, setCommercial] = useState([]);
@@ -333,6 +333,21 @@ const PropertyDetails = () => {
     }
   }
 
+  const sendMessage = async() => {
+    const conversationId = await chatServices.newConversation({
+      propertyId: property.id,
+      // @ts-ignore
+      propertyName: name?.name,
+      ownerId:  property.userId,
+      propertyPicture: property.images[0],
+      ownerName: "",
+      clientId: userId,
+      lastMessage: "",
+      lastUpdated: ""
+    });
+    navigate(`/chat/${conversationId}`)
+  }
+
   return (
     <div>
       <div className="flex space-x-4 pb-4 items-center">
@@ -479,14 +494,22 @@ const PropertyDetails = () => {
                 </div>
               </section>
               <section className="flex flex-col gap-y-4">
-                {(isTenant || isVisitor) && (
-                  <Button
-                    icon="heroicons-outline:calendar"
-                    text="Programmer une visite"
-                    onClick={toggleDisplayVisit}
-                    className=" btn btn-dark "
-                  />
-                )}
+                {(isTenant || isVisitor) && 
+                  <>
+                    <Button
+                      icon="heroicons-outline:calendar"
+                      text="Programmer une visite"
+                      onClick={toggleDisplayVisit}
+                      className=" btn btn-dark "
+                    />
+                    <Button
+                      icon="heroicons-outline:chat-bubble-bottom-center-text"
+                      text="Contacter le proprietaire"
+                      onClick={sendMessage}
+                      className=" btn btn-dark "
+                    />
+                  </>
+                }
                 {isAdmin && property.status === 0 && (
                   <Button
                     icon="heroicons-outline:check"

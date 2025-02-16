@@ -4,6 +4,7 @@ import { useDependencies } from "@/utils/useDependencies";
 const { userServices } = useDependencies();
 let currentUser = userServices.getCurrentUserSession();
 console.log(currentUser?.id);
+console.log(currentUser?.id);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -31,3 +32,5 @@ export const authSlice = createSlice({
 
 export const { setUser, logOut } = authSlice.actions;
 export default authSlice.reducer;
+// qwertyuiopasdfghjkl;'zxcv/bnm,./]\-=0987654321`  AaS'Aah-0
+// export const define async component

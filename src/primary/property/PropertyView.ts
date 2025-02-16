@@ -3,6 +3,7 @@ import { PropertyId, PropertyType } from "@/domains/property/types";
 import { addressProperties, MoneyProperties } from "domains/types";
 
 export class PropertyView {
+  nomPropriete: any;
   private constructor(
     readonly id: PropertyId,
     readonly centreImposition: string,
